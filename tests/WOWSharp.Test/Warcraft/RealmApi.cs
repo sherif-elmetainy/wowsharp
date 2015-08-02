@@ -15,6 +15,9 @@ namespace WOWSharp.Test.Warcraft
             var client = TestHelper.CreateDefaultWarcraftClient();
             var task = client.GetRealmStatusAsync();
             RealmStatusResponse response = task.Result;
+            task = client.GetRealmStatusAsync();
+            RealmStatusResponse response2 = task.Result;
+            Assert.Same(response, response2);
             Assert.NotNull(response);
             Assert.True(new RealmStatusResponse().ToString().Contains('0'));
             Assert.NotNull(response.ToString());

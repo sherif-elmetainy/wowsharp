@@ -28,6 +28,7 @@ namespace WOWSharp.Warcraft
     ///   represents the response of guild rewards request
     /// </summary>
     [JsonObject(MemberSerialization.OptIn)]
+    [BattleNetCachePolicy(CacheDurationSeconds = 3600, UseSlidingExpiration = true, ShouldCheckIfCachedEntriesAreModified = true)]
     public class GuildRewardsResponse : ApiResponse
     {
         /// <summary>

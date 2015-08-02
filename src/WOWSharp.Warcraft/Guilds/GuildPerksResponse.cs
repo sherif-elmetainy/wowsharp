@@ -28,6 +28,7 @@ namespace WOWSharp.Warcraft
     ///   Represents the response for the guild perks request
     /// </summary>
     [JsonObject(MemberSerialization.OptIn)]
+    [BattleNetCachePolicy(CacheDurationSeconds = 3600, UseSlidingExpiration = true, ShouldCheckIfCachedEntriesAreModified = true)]
     public class GuildPerksResponse : ApiResponse
     {
         /// <summary>

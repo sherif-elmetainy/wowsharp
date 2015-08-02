@@ -27,6 +27,7 @@ namespace WOWSharp.Warcraft
     /// <summary>
     /// Challenges response
     /// </summary>
+    [BattleNetCachePolicy(CacheDurationSeconds = 900, UseSlidingExpiration = false, ShouldCheckIfCachedEntriesAreModified = true)]
     [JsonObject(MemberSerialization.OptIn)]
     public class ChallengesResponse : ApiResponse
     {

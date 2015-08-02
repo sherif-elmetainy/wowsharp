@@ -12,15 +12,15 @@ namespace WOWSharp.Core.Serialization
     {
         public override bool CanConvert(Type objectType)
         {
-            if (objectType.GetTypeInfo().IsEnum)
+            if (objectType.IsEnumeration())
                 return true;
             objectType = Nullable.GetUnderlyingType(objectType);
-            return objectType != null && objectType.GetTypeInfo().IsEnum;
+            return objectType != null && objectType.IsEnumeration();
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            var isNullable = objectType.GetTypeInfo().IsGenericType && objectType.GetGenericTypeDefinition() == typeof(Nullable<>);
+            var isNullable = objectType.IsNullable();
             var type = isNullable ? Nullable.GetUnderlyingType(objectType) : objectType;
 
             try

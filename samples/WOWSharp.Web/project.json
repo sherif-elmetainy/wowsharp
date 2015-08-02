@@ -27,8 +27,8 @@
     "Microsoft.Framework.Logging.Console": "1.0.0-beta6",
     "Microsoft.VisualStudio.Web.BrowserLink.Loader": "14.0.0-beta6",
     "Microsoft.Framework.NotNullAttribute.Sources": { "version": "1.0.0-*", "type": "build" },
-    "WOWSharp.AspNet.Authentication.BattleNet": "1.0.0-*",
-    "WOWSharp.Warcraft": "1.0.0-*"
+    "WOWSharp.AspNet.Authentication.BattleNet": "3.0.0-*",
+    "WOWSharp.Warcraft": "3.0.0-*"
   },
 
   "commands": {

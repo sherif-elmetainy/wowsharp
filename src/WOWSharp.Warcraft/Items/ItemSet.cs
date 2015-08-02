@@ -28,6 +28,7 @@ namespace WOWSharp.Warcraft
     ///   Item set's information
     /// </summary>
     [JsonObject(MemberSerialization.OptIn)]
+    [BattleNetCachePolicy(CacheDurationSeconds = 3600, UseSlidingExpiration = true, ShouldCheckIfCachedEntriesAreModified = true)]
     public class ItemSet : ApiResponse
     {
         /// <summary>

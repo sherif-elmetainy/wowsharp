@@ -27,6 +27,7 @@ namespace WOWSharp.Warcraft
     /// <summary>
     ///   information about a battle pet species
     /// </summary>
+    [BattleNetCachePolicy(CacheDurationSeconds = 3600, UseSlidingExpiration = true, ShouldCheckIfCachedEntriesAreModified = true)]
     [JsonObject(MemberSerialization.OptIn)]
     public class BattlePetSpecies : ApiResponse
     {

@@ -29,6 +29,7 @@ namespace WOWSharp.Warcraft
     ///   Represents character profile information
     /// </summary>
     [JsonObject(MemberSerialization.OptIn)]
+    [BattleNetCachePolicy(CacheDurationSeconds = 600, UseSlidingExpiration = false, ShouldCheckIfCachedEntriesAreModified = true)]
     public class Character : ApiResponse
     {
         /// <summary>

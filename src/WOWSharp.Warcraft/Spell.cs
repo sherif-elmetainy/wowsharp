@@ -27,6 +27,7 @@ namespace WOWSharp.Warcraft
     ///   Represents information about a spell
     /// </summary>
     [JsonObject(MemberSerialization.OptIn)]
+    [BattleNetCachePolicy(CacheDurationSeconds = 3600, UseSlidingExpiration = true, ShouldCheckIfCachedEntriesAreModified = true)]
     public class Spell : ApiResponse
     {
         /// <summary>

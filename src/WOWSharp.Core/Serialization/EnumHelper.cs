@@ -11,13 +11,7 @@ namespace WOWSharp.Core.Serialization
         private static readonly Dictionary<Type, Dictionary<string, object>> _stringDict = new Dictionary<Type, Dictionary<string, object>>();
         private static readonly Dictionary<Type, Dictionary<object, string>> _enumDict = new Dictionary<Type, Dictionary<object, string>>();
 
-        internal static EnumMemberAttribute GetEnumMemberAttribute(this FieldInfo fieldInfo)
-        {
-            var attrs = fieldInfo.GetCustomAttributes(typeof(EnumMemberAttribute));
-            if (attrs == null)
-                return null;
-            return attrs.OfType<EnumMemberAttribute>().FirstOrDefault();
-        }
+        
 
         /// <summary>
         ///   Initializes String -> EnumValue cache
@@ -51,10 +45,7 @@ namespace WOWSharp.Core.Serialization
             return dict;
         }
 
-        internal static IEnumerable<FieldInfo> GetEnumFields(this Type enumType)
-        {
-            return enumType.GetTypeInfo().DeclaredFields.Where(f => f.IsLiteral);
-        }
+        
 
         private static Dictionary<string, object> GetStringDict(Type enumType)
         {
@@ -89,13 +80,13 @@ namespace WOWSharp.Core.Serialization
             if (value == null)
                 return null;
             var type = value.GetType();
-            if (!type.GetTypeInfo().IsEnum)
+            if (!type.IsEnumeration())
                 throw new ArgumentException($"Argument {value} is of type {type.FullName} which is not an enum type.", nameof(value));
             var dict = GetEnumDict(type);
             string result;
             if (!dict.TryGetValue(value, out result))
             {
-                throw new ArgumentOutOfRangeException(nameof(value), value, $"Cannot find a string value for enum value {value} of type {type.FullName}.");
+                throw new ArgumentOutOfRangeException(nameof(value), $"Cannot find a string value for enum value {value} of type {type.FullName}.");
             }
             return result;
         }
@@ -104,7 +95,7 @@ namespace WOWSharp.Core.Serialization
         {
             if (enumType == null)
                 throw new ArgumentNullException(nameof(enumType));
-            if (!enumType.GetTypeInfo().IsEnum)
+            if (!enumType.IsEnumeration())
                 throw new ArgumentException($"The type {enumType.FullName} which is not an enum type.", nameof(enumType));
             if (string.IsNullOrEmpty(stringValue))
                 return null;
@@ -112,7 +103,7 @@ namespace WOWSharp.Core.Serialization
             object result;
             if (!dict.TryGetValue(stringValue, out result))
             {
-                throw new ArgumentOutOfRangeException(nameof(stringValue), stringValue, $"Cannot find a enum value for string value {stringValue} of type {enumType.FullName}.");
+                throw new ArgumentOutOfRangeException(nameof(stringValue), $"Cannot find a enum value for string value {stringValue} of type {enumType.FullName}.");
             }
             return result;
         }

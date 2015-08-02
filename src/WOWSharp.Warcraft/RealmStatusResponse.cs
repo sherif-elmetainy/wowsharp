@@ -29,6 +29,7 @@ namespace WOWSharp.Warcraft
     ///   The API response for Realm status
     /// </summary>
     [JsonObject(MemberSerialization.OptIn)]
+    [BattleNetCachePolicy(CacheDurationSeconds = 600, UseSlidingExpiration = true, ShouldCheckIfCachedEntriesAreModified = false)]
     public class RealmStatusResponse : ApiResponse
     {
         /// <summary>

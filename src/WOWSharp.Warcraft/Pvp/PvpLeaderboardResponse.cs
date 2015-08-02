@@ -32,6 +32,7 @@ namespace WOWSharp.Warcraft
     /// Represents response to the Leader board API
     /// </summary>
     [JsonObject(MemberSerialization.OptIn)]
+    [BattleNetCachePolicy(CacheDurationSeconds = 600, UseSlidingExpiration = false, ShouldCheckIfCachedEntriesAreModified = true)]
     public class PvpLeaderboardResponse : ApiResponse
     {
         /// <summary>

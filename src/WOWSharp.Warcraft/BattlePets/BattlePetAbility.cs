@@ -26,6 +26,7 @@ namespace WOWSharp.Warcraft
     /// <summary>
     ///   information about a battle pet ability
     /// </summary>
+    [BattleNetCachePolicy(CacheDurationSeconds = 3600, UseSlidingExpiration = true, ShouldCheckIfCachedEntriesAreModified = true)]
     [JsonObject(MemberSerialization.OptIn)]
     public class BattlePetAbility : ApiResponse
     {

@@ -27,6 +27,7 @@ namespace WOWSharp.Warcraft
     ///   Represents information about recipe
     /// </summary>
     [JsonObject(MemberSerialization.OptIn)]
+    [BattleNetCachePolicy(CacheDurationSeconds = 3600, UseSlidingExpiration = true, ShouldCheckIfCachedEntriesAreModified = true)]
     public class RecipeInfo : ApiResponse
     {
         /// <summary>

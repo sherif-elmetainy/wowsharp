@@ -28,6 +28,7 @@ namespace WOWSharp.Warcraft
     ///   Responses response for item category names (item classes) response
     /// </summary>
     [JsonObject(MemberSerialization.OptIn)]
+    [BattleNetCachePolicy(CacheDurationSeconds = 3600, UseSlidingExpiration = true, ShouldCheckIfCachedEntriesAreModified = true)]
     public class ItemCategoryNamesResponse : ApiResponse
     {
         /// <summary>

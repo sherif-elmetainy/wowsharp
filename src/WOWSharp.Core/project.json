@@ -1,5 +1,5 @@
 ﻿{
-  "version": "1.0.0-*",
+  "version": "3.0.0-*",
   "description": "WOWSharp.Interfaces Class Library",
   "authors": [ "Sherif" ],
   "tags": [ "" ],
@@ -8,16 +8,21 @@
 
   "dependencies": {
     "WOWSharp.Interfaces": "",
-    "Newtonsoft.Json": "7.0.1",
-    "Microsoft.Framework.OptionsModel": "1.0.0-beta6",
-    "Microsoft.Framework.Logging.Abstractions": "1.0.0-beta6",
-    "Microsoft.Framework.NotNullAttribute.Sources": {
-      "version": "1.0.0-*",
-      "type": "build"
-    }
+    "Newtonsoft.Json": "7.0.1"
   },
 
   "frameworks": {
+    ".NETPortable,Version=v4.0,Profile=Profile328": {
+      "frameworkAssemblies": {
+        "System.Core": "",
+        "mscorlib": "",
+        "System.Net": ""
+      },
+      "dependencies": {
+        "Microsoft.Bcl.Async": "1.0.168",
+        "Microsoft.Bcl": "1.1.10"
+      }
+    },
     "dnx451": {
       "frameworkAssemblies": {
         "mscorlib": "4.0.0.0",
@@ -27,16 +32,34 @@
         "System.Runtime.Serialization": "4.0.0.0"
       },
       "dependencies": {
-        "Microsoft.Net.Http": "2.2.29"
-      }
+        "Microsoft.Net.Http": "2.2.29",
+        "Microsoft.Framework.OptionsModel": "1.0.0-beta6",
+        "Microsoft.Framework.Logging.Abstractions": "1.0.0-beta6",
+        "Microsoft.Framework.Caching.Memory": "1.0.0-beta6",
+        "Microsoft.Framework.NotNullAttribute.Sources": {
+          "version": "1.0.0-*",
+          "type": "build"
+        },
+        "Microsoft.Framework.Caching.Abstractions": "1.0.0-beta6"
+      },
+      "compilationOptions": { "define": [ "LOGGING", "OPTIONS", "NOTNULL" ] }
     },
     "net45": {
       "frameworkAssemblies": {
         "mscorlib": "4.0.0.0"
       },
       "dependencies": {
-        "Microsoft.Net.Http": "2.2.29"
-      }
+        "Microsoft.Net.Http": "2.2.29",
+        "Microsoft.Framework.Caching.Memory": "1.0.0-beta6",
+        "Microsoft.Framework.OptionsModel": "1.0.0-beta6",
+        "Microsoft.Framework.Logging.Abstractions": "1.0.0-beta6",
+        "Microsoft.Framework.NotNullAttribute.Sources": {
+          "version": "1.0.0-*",
+          "type": "build"
+        },
+        "Microsoft.Framework.Caching.Abstractions": "1.0.0-beta6"
+      },
+      "compilationOptions": { "define": [ "LOGGING", "OPTIONS", "NOTNULL" ] }
     },
     "dotnet": {
       "dependencies": {
@@ -45,18 +68,16 @@
         "System.Linq": "4.0.0-beta-23109",
         "System.Globalization": "4.0.10-beta-23109",
         "System.Reflection.Extensions": "4.0.0-beta-23109",
-        "System.Net.Http": "4.0.0-beta-23109"
-      }
-    },
-    "dnxcore50": {
-      "dependencies": {
-        "System.Runtime": "4.0.20-beta-23109",
-        "System.Collections": "4.0.10-beta-23109",
-        "System.Globalization": "4.0.10-beta-23109",
-        "System.Linq": "4.0.0-beta-23109",
-        "System.Reflection.Extensions": "4.0.0-beta-23109",
-        "System.Net.Http.WinHttpHandler": "4.0.0-beta-23109"
-      }
+        "System.Net.Http": "4.0.0-beta-23109",
+        "Microsoft.Framework.Caching.Memory": "1.0.0-beta6",
+        "Microsoft.Framework.OptionsModel": "1.0.0-beta6",
+        "Microsoft.Framework.Logging.Abstractions": "1.0.0-beta6",
+        "Microsoft.Framework.NotNullAttribute.Sources": {
+          "version": "1.0.0-*",
+          "type": "build"
+        }
+      },
+      "compilationOptions": { "define": [ "LOGGING", "OPTIONS", "NOTNULL" ] }
     }
   }
 }

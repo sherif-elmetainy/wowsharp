@@ -16,7 +16,7 @@ namespace WOWSharp.Web.Controllers
             _wowClient = wowClient;
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             return View();
         }

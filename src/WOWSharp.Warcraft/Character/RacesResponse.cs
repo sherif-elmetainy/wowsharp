@@ -28,6 +28,7 @@ namespace WOWSharp.Warcraft
     ///   Represents the response returned when querying the website about character races
     /// </summary>
     [JsonObject(MemberSerialization.OptIn)]
+    [BattleNetCachePolicy(CacheDurationSeconds = 3600, UseSlidingExpiration = true, ShouldCheckIfCachedEntriesAreModified = true)]
     public class RacesResponse : ApiResponse
     {
         /// <summary>

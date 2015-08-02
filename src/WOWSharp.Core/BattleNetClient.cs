@@ -1,8 +1,15 @@
-﻿using Microsoft.Framework.Internal;
+﻿#if LOGGING
 using Microsoft.Framework.Logging;
+#endif
+
+#if OPTIONS
 using Microsoft.Framework.OptionsModel;
+#endif
+
+using Microsoft.Framework.Internal;
 using Newtonsoft.Json;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Net.Http;
@@ -22,15 +29,24 @@ namespace WOWSharp.Core
         private readonly IBattleNetAccessTokenAccessor _accessTokenAccessor;
         private readonly JsonSerializer _jsonSerializer;
         private readonly IBattleNetCachePolicy _cachePolicy;
+
+#if LOGGING
         private readonly ILogger _logger;
+#endif
 
         public BattleNetClient(
-                [NotNull] IOptions<BattleNetClientOptions> options,
+#if LOGGING
                 [NotNull] ILoggerFactory loggerFactory,
+#endif
+#if OPTIONS
+                [NotNull] IOptions<BattleNetClientOptions> options,
+                ConfigureOptions<BattleNetClientOptions> configureOptions = null,
+#else
+                [NotNull] BattleNetClientOptions options,
+#endif
                 HttpClient httpclient = null,
                 IRegionSelector regionSelector = null,
                 ILocaleSelector localeSelector = null,
-                ConfigureOptions<BattleNetClientOptions> configureOptions = null,
                 IBattleNetAccessTokenAccessor accessTokenAccessor = null,
                 IBattleNetCachePolicy cachePolicy = null,
                 IBattleNetCache cache = null
@@ -39,6 +55,7 @@ namespace WOWSharp.Core
             _httpClient = httpclient ?? new HttpClient();
             _regionSelector = _regionSelector ?? DefaultRegionSelector.DefaultInstance;
             _localeSelector = localeSelector;
+#if OPTIONS
             if (configureOptions != null)
             {
                 _options = options.GetNamedOptions(configureOptions.Name);
@@ -48,7 +65,12 @@ namespace WOWSharp.Core
             {
                 _options = options.Options;
             }
+#else
+            _options = options;
+#endif
+#if LOGGING
             _logger = loggerFactory.CreateLogger(GetType().FullName);
+#endif
             _cache = cache;
             _cachePolicy = cachePolicy;
             _accessTokenAccessor = accessTokenAccessor;
@@ -57,7 +79,43 @@ namespace WOWSharp.Core
                 MissingMemberHandling = _options.ThrowErrorOnMissingMembers ? MissingMemberHandling.Error : MissingMemberHandling.Ignore
             };
         }
-        
+
+        /// <summary>
+        /// Writes a verbose log message
+        /// </summary>
+        /// <param name="message"></param>
+        [Conditional("LOGGING")]
+        private void LogVerbose(string message)
+        {
+#if LOGGING
+            _logger.LogVerbose(message);
+#endif
+        }
+
+        /// <summary>
+        /// Writes an error message to log
+        /// </summary>
+        /// <param name="message"></param>
+        [Conditional("LOGGING")]
+        private void LogError(string message)
+        {
+#if LOGGING
+            _logger.LogError(message);
+#endif
+        }
+
+        /// <summary>
+        /// Writes an warning message to log
+        /// </summary>
+        /// <param name="message"></param>
+        [Conditional("LOGGING")]
+        private void LogWarning(string message)
+        {
+#if LOGGING
+            _logger.LogWarning(message);
+#endif
+        }
+
         /// <summary>
         /// Fetches an and parse data from battle.net API and tries to use cache if possible
         /// </summary>
@@ -80,7 +138,7 @@ namespace WOWSharp.Core
             }
             if (cacheResult != null)
             {
-                _logger.LogVerbose($"CacheHit: {key}");
+                LogVerbose($"CacheHit: {key}");
                 // Check policy for item and whether to return the cached item immediately or check if it was modified
                 var options = _cachePolicy.GetBattleNetCacheOptions(cacheResult);
                 if (!options.ShouldCheckIfCachedEntriesAreModified)
@@ -90,7 +148,7 @@ namespace WOWSharp.Core
             }
             else
             {
-                _logger.LogVerbose($"CacheMiss: {key}");
+                LogVerbose($"CacheMiss: {key}");
             }
 
             // Perform actual call to bnet API
@@ -123,7 +181,7 @@ namespace WOWSharp.Core
                 var options = _cachePolicy?.GetBattleNetCacheOptions(result) ?? BattleNetCacheOptions.Default;
                 if (options.CacheDurationSeconds > 0)
                 {
-                    _logger.LogVerbose($"CacheAdd: {key}, {options.CacheDurationSeconds} secs, sliding: {options.UseSlidingExpiration}");
+                    LogVerbose($"CacheAdd: {key}, {options.CacheDurationSeconds} secs, sliding: {options.UseSlidingExpiration}");
                     await _cache.SetAsync(key, result, options);
                 }
             }
@@ -201,7 +259,8 @@ namespace WOWSharp.Core
             if (_accessTokenAccessor == null)
             {
                 var error = $"BNetApi: No instance of {typeof(IBattleNetAccessTokenAccessor).Name} service was provided for the this instance of {typeof(BattleNetClient).Name}.";
-                _logger.LogError(error);
+                LogError(error);
+
                 throw new InvalidOperationException(error);
             }
             var host = region.ApiHost;
@@ -210,7 +269,7 @@ namespace WOWSharp.Core
             if (string.IsNullOrWhiteSpace(token))
             {
                 var error = "BNetApi: Unable to obtain access token for user. User is not authenticated or not authorization failed.";
-                _logger.LogWarning(error);
+                LogWarning(error);
                 throw new ApiException(error);
             }
             var query = (string.IsNullOrEmpty(uri.Query) ? "?" : "&") + $"access_token={token}";
@@ -234,12 +293,12 @@ namespace WOWSharp.Core
             var response = await _httpClient.SendAsync(request).ConfigureAwait(false);
             if (response.StatusCode == HttpStatusCode.NotModified)
             {
-                _logger.LogVerbose($"BnetNotModified: {uri}");
+                LogVerbose($"BnetNotModified: {uri}");
                 return null;
             }
             if (response.IsSuccessStatusCode)
             {
-                _logger.LogVerbose($"BnetSuccess: {uri}");
+                LogVerbose($"BnetSuccess: {uri}");
                 return await DeserializeResponse<TResult>(response, path);
             }
             else
@@ -253,7 +312,7 @@ namespace WOWSharp.Core
                 {
                     error = null;
                 }
-                _logger.LogError($"BnetApiError: {uri}, Status Code {response.StatusCode}, error: {error?.Reason}");
+                LogError($"BnetApiError: {uri}, Status Code {response.StatusCode}, error: {error?.Reason}");
                 throw new ApiException(error, response.StatusCode, null);
             }
         }
@@ -301,6 +360,7 @@ namespace WOWSharp.Core
                         deserializeTask.Start();
                         apiResponseResult = await deserializeTask.ConfigureAwait(false);
 
+                        apiResponseResult.LastModified = responseMessage.Content.Headers.LastModified ?? DateTimeOffset.Now;
                         // Post serialization
                         apiResponseResult.Path = path;
                         return apiResponseResult;

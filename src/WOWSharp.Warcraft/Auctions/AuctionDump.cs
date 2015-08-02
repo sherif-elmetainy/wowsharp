@@ -26,6 +26,7 @@ namespace WOWSharp.Warcraft
     /// <summary>
     ///   Represents a realm auctions dump
     /// </summary>
+    [BattleNetCachePolicy(CacheDurationSeconds = 30, UseSlidingExpiration = false, ShouldCheckIfCachedEntriesAreModified = false)]
     [JsonObject(MemberSerialization.OptIn)]
     public class AuctionDump : ApiResponse
     {

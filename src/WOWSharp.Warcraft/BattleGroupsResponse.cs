@@ -29,7 +29,7 @@ namespace WOWSharp.Warcraft
     ///   Battle groups information
     /// </summary>
     [JsonObject(MemberSerialization.OptIn)]
-    //[DoNotAuthenticate]
+    [BattleNetCachePolicy(CacheDurationSeconds = 3600, UseSlidingExpiration = true, ShouldCheckIfCachedEntriesAreModified = true)]
     public class BattleGroupsResponse : ApiResponse
     {
         /// <summary>

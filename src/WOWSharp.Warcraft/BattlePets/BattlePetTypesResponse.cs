@@ -27,6 +27,7 @@ namespace WOWSharp.Warcraft
     /// <summary>
     ///   response to pet types API
     /// </summary>
+    [BattleNetCachePolicy(CacheDurationSeconds = 3600, UseSlidingExpiration = true, ShouldCheckIfCachedEntriesAreModified = true)]
     [JsonObject(MemberSerialization.OptIn)]
     public class BattlePetTypesResponse : ApiResponse
     {

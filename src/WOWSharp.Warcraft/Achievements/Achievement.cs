@@ -27,6 +27,7 @@ namespace WOWSharp.Warcraft
     /// <summary>
     ///   Represents an achievement
     /// </summary>
+    [BattleNetCachePolicy(CacheDurationSeconds = 3600, UseSlidingExpiration = true, ShouldCheckIfCachedEntriesAreModified = true)]
     [JsonObject(MemberSerialization.OptIn)]
     public class Achievement : ApiResponse
     {

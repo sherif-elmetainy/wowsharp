@@ -28,6 +28,7 @@ namespace WOWSharp.Warcraft
     ///   Represents the list of recently generated AH dumps
     /// </summary>
     [JsonObject(MemberSerialization.OptIn)]
+    [BattleNetCachePolicy(CacheDurationSeconds = 30, UseSlidingExpiration = false, ShouldCheckIfCachedEntriesAreModified = false)]
     internal class AuctionFilesResponse : ApiResponse
     {
         /// <summary>

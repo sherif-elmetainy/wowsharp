@@ -27,6 +27,7 @@ namespace WOWSharp.Warcraft
     /// <summary>
     ///   Represents the response of guild or character achievements request
     /// </summary>
+    [BattleNetCachePolicy(CacheDurationSeconds = 3600, UseSlidingExpiration = true, ShouldCheckIfCachedEntriesAreModified = true)]
     [JsonObject(MemberSerialization.OptIn)]
     public class AchievementsResponse : ApiResponse
     {

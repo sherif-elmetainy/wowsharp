@@ -20,19 +20,15 @@ namespace WOWSharp.Test
 
             var services = new ServiceCollection();
 
-            services.AddLogging();
-            services.AddOptions();
+            services.AddWarcraft();
+            services.AddBattleNetCache();
             services.Configure<BattleNetClientOptions>(options =>
             {
                 options.ApiKey = configuration["Authentication:BattleNet:Key"];
                 options.ParseApiResponseInformation = true;
                 options.ThrowErrorOnMissingMembers = true;
             });
-            services.AddScoped<HttpClient>();
-            services.AddInstance<IRegionSelector>(DefaultRegionSelector.DefaultInstance);
-            services.AddScoped<IBattleNetClient, BattleNetClient>();
-            services.AddScoped<WarcraftClient>();
-
+            
             return services.BuildServiceProvider();
         }
 

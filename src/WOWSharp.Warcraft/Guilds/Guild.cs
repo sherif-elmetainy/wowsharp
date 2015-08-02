@@ -29,6 +29,7 @@ namespace WOWSharp.Warcraft
     ///   Represents a guild's profile
     /// </summary>
     [JsonObject(MemberSerialization.OptIn)]
+    [BattleNetCachePolicy(CacheDurationSeconds = 600, UseSlidingExpiration = false, ShouldCheckIfCachedEntriesAreModified = true)]
     public class Guild : ApiResponse
     {
         /// <summary>

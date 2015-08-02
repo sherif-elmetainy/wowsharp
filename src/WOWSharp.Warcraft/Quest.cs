@@ -27,6 +27,7 @@ namespace WOWSharp.Warcraft
     ///   Represents quest information
     /// </summary>
     [JsonObject(MemberSerialization.OptIn)]
+    [BattleNetCachePolicy(CacheDurationSeconds = 3600, UseSlidingExpiration = true, ShouldCheckIfCachedEntriesAreModified = true)]
     public class Quest : ApiResponse
     {
         /// <summary>

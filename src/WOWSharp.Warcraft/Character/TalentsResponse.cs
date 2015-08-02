@@ -27,6 +27,7 @@ namespace WOWSharp.Warcraft
     ///   response for talents API call
     /// </summary>
     [JsonObject(MemberSerialization.OptIn)]
+    [BattleNetCachePolicy(CacheDurationSeconds = 3600, UseSlidingExpiration = true, ShouldCheckIfCachedEntriesAreModified = true)]
     public class TalentsResponse : ApiResponse
     {
         /// <summary>
