@@ -1,0 +1,10 @@
+{
+  "AppSettings": {
+    "SiteTitle": "WOWSharp.Web"
+  },
+  "Data": {
+    "DefaultConnection": {
+      "ConnectionString": "Server=(localdb)\\mssqllocaldb;Database=aspnet5-WOWSharp.Web-451b7471-bcf7-41db-816c-448ebb16ffad;Trusted_Connection=True;MultipleActiveResultSets=true"
+    }
+  }
+}

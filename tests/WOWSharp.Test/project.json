@@ -1,0 +1,36 @@
+﻿{
+  "version": "1.0.0-*",
+  "description": "WOWSharp.Test Class Library",
+  "authors": [ "Sherif" ],
+  "tags": [ "" ],
+  "projectUrl": "",
+  "licenseUrl": "",
+  "userSecretsId": "WOWSharp",
+
+  "dependencies": {
+    "Microsoft.Framework.Configuration.UserSecrets": "1.0.0-beta6",
+    "WOWSharp.Warcraft": "1.0.0-*",
+    "xunit": "2.1.0-beta3-build3029",
+    "xunit.assert": "2.1.0-beta3-build3029",
+    "xunit.runner.dnx": "2.1.0-beta3-build99",
+    "xunit.runner.visualstudio": "2.1.0-beta3-build1069",
+    "Microsoft.Framework.DependencyInjection": "1.0.0-beta6",
+    "Microsoft.Framework.Runtime": "1.0.0-beta6",
+    "Microsoft.Framework.Logging": "1.0.0-beta6",
+    "Microsoft.Framework.ApplicationHost": "1.0.0-beta6"
+  },
+  "commands": {
+    "test": "xunit.runner.dnx"
+  },
+  "frameworks": {
+    "dnx451": {
+      "frameworkAssemblies": {
+        "mscorlib": "4.0.0.0",
+        "System": "4.0.0.0",
+        "System.Core": "4.0.0.0",
+        "Microsoft.CSharp": "4.0.0.0",
+        "System.Runtime": "4.0.10.0"
+      }
+    }
+  }
+}

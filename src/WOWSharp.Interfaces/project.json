@@ -1,0 +1,47 @@
+﻿{
+  "version": "1.0.0-*",
+  "description": "WOWSharp.Interfaces Class Library",
+  "authors": [ "Sherif" ],
+  "tags": [ "" ],
+  "projectUrl": "",
+  "licenseUrl": "",
+
+  "dependencies": {
+  },
+
+  "frameworks": {
+    "dnx451": {
+      "frameworkAssemblies": {
+        "mscorlib": "4.0.0.0",
+        "System": "4.0.0.0",
+        "System.Core": "4.0.0.0",
+        "Microsoft.CSharp": "4.0.0.0",
+        "System.Runtime.Serialization": "4.0.0.0"
+      },
+      "dependencies": {
+
+      }
+    },
+    "net45": {
+      "frameworkAssemblies": {
+        "mscorlib": "4.0.0.0"
+      }
+    },
+    "dotnet": {
+      "dependencies": {
+        "System.Runtime": "4.0.20-beta-23109",
+        "System.Collections": "4.0.10-beta-23109",
+        "System.Linq": "4.0.0-beta-23109",
+        "System.Globalization": "4.0.10-beta-23109"
+      }
+    },
+    "dnxcore50": {
+      "dependencies": {
+        "System.Runtime": "4.0.20-beta-23109",
+        "System.Collections": "4.0.10-beta-23109",
+        "System.Globalization": "4.0.10-beta-23109",
+        "System.Linq": "4.0.0-beta-23109"
+      }
+    }
+  }
+}
