@@ -1,5 +1,5 @@
 ﻿{
-  "version": "3.0.0-*",
+  "version": "3.0.0-alpha1",
   "description": "WOWSharp.Interfaces Class Library",
   "authors": [ "Sherif" ],
   "tags": [ "" ],
@@ -12,20 +12,18 @@
   },
 
   "frameworks": {
-    ".NETPortable,Version=v4.0,Profile=Profile328": {
+    ".NETPortable,Version=v4.0,Profile=Profile240": {
       "frameworkAssemblies": {
         "System.Core": "",
-        "mscorlib": "",
-        "System": ""
-      },
-      "dependencies": {
-        "Microsoft.Bcl.Async": "1.0.168",
-        "Microsoft.Net.Http": "2.2.29"
+        "mscorlib": ""
       }
     },
-    "net45": {
+    "dnx451": {
       "frameworkAssemblies": {
-        "mscorlib": "4.0.0.0"
+        "mscorlib": "4.0.0.0",
+        "System": "4.0.0.0",
+        "System.Core": "4.0.0.0",
+        "Microsoft.CSharp": "4.0.0.0"
       },
       "dependencies": {
         "Microsoft.Framework.NotNullAttribute.Sources": {
@@ -35,15 +33,12 @@
       },
       "compilationOptions": { "define": [ "NOTNULL" ] }
     },
-    "dnx451": {
-      "frameworkAssemblies": {
-        "mscorlib": "4.0.0.0",
-        "System": "4.0.0.0",
-        "System.Core": "4.0.0.0",
-        "Microsoft.CSharp": "4.0.0.0",
-        "System.Runtime.Serialization": "4.0.0.0"
-      },
+    "dnxcore50": {
       "dependencies": {
+        "System.Runtime": "4.0.20",
+        "System.Collections": "4.0.10",
+        "System.Linq": "4.0.0",
+        "System.Globalization": "4.0.10",
         "Microsoft.Framework.NotNullAttribute.Sources": {
           "version": "1.0.0-*",
           "type": "build"
@@ -53,10 +48,11 @@
     },
     "dotnet": {
       "dependencies": {
-        "System.Runtime": "4.0.20-beta-23109",
-        "System.Collections": "4.0.10-beta-23109",
-        "System.Linq": "4.0.0-beta-23109",
-        "System.Globalization": "4.0.10-beta-23109",
+        "System.Runtime": "4.0.10",
+        "System.Collections": "4.0.0",
+        "System.Linq": "4.0.0",
+        "System.Globalization": "4.0.0",
+        "System.Runtime.Extensions": "4.0.0",
         "Microsoft.Framework.NotNullAttribute.Sources": {
           "version": "1.0.0-*",
           "type": "build"

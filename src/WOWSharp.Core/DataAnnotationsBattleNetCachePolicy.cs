@@ -13,7 +13,7 @@ namespace WOWSharp.Core
         public BattleNetCacheOptions GetBattleNetCacheOptions([NotNull] object obj)
         {
             var type = obj.GetType();
-#if DOTNET
+#if DOTNET || DNXCORE50
             var attrs = type.GetTypeInfo().GetCustomAttributes(typeof(BattleNetCachePolicyAttribute), true);
 #else
             var attrs = type.GetCustomAttributes(typeof(BattleNetCachePolicyAttribute), true);
