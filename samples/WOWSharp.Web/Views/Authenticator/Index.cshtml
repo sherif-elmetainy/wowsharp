@@ -1,0 +1,57 @@
+﻿@model IEnumerable<WOWSharp.BattleNet.Authenticator.AuthenticatorData>
+
+<h2>@ViewData["Title"]</h2>
+<div class="row">
+    <div class="container">
+        <span class="alert-warning">
+            While it is typically not ideal to have authenticator functionality in a web page,
+            this page is created only to test and demonstrate the functionality of the authenticators library.
+        </span>
+    </div>
+</div>
+<br />
+<div class="row">
+    <div class="container">
+        <a class="btn btn-default" asp-action="Restore">Restore</a>
+        <a class="btn btn-default" asp-action="Create">Create New</a>
+    </div>
+</div>
+<br />
+<div class="row">
+    <div class="col-md-8">
+
+        <section>
+            <table class="grid col-md-12">
+                <thead>
+                    <tr>
+                        <th>Account Name</th>
+                        <th>Serial</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var auth in Model)
+                    {
+                        <tr>
+                            <td>
+                                @auth.AccountName
+                            </td>
+                            <td>
+                                @auth.Serial
+                            </td>
+                            <td>
+                                <a asp-action="Code" asp-route-name="@auth.AccountName" class="btn btn-default code-btn">Code</a>
+                                <a asp-action="Sync" asp-route-name="@auth.AccountName" class="btn btn-default sync-btn">Sync</a>
+                                <a asp-action="Delete" class="btn btn-danger delt-btn" asp-route-name="@auth.AccountName">Delete</a>
+                            </td>
+                        </tr>
+
+                    }
+                </tbody>
+            </table>
+        </section>
+    </div>
+</div>
+@section scripts{
+    <script type="text/javascript" src="~/js/authenticator.js"></script>
+}

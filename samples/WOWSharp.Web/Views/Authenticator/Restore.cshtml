@@ -1,0 +1,55 @@
+﻿@model RestoreAuthenticatorModel
+@{
+    ViewBag.Title = "Restore authenticator";
+}
+<h2>@ViewData["Title"]</h2>
+<div class="row">
+    <div class="container">
+        <span class="alert-warning">
+            While it is typically not ideal to have authenticator functionality in a web page,
+            this page is created only to test and demonstrate the functionality of the authenticators library.
+        </span>
+    </div>
+</div>
+<br />
+<div class="row">
+    <div class="col-md-8">
+        <section>
+            <form asp-antiforgery="true">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label class="control-label col-md-2" asp-for="AccountName"></label>
+                        <div class="col-md-10">
+                            <input asp-for="AccountName" class="form-control" />
+                            <span asp-validation-for="AccountName" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-2" asp-for="Serial"></label>
+                        <div class="col-md-10">
+                            <input asp-for="Serial" class="form-control" />
+                            <span asp-validation-for="Serial" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-2" asp-for="RestoreCode"></label>
+                        <div class="col-md-10">
+                            <input asp-for="RestoreCode" class="form-control" />
+                            <span asp-validation-for="RestoreCode" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            <button type="submit" class="btn btn-default">Restore Authenticator</button>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+        </section>
+    </div>
+</div>
+
+@section Scripts {
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+}

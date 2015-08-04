@@ -1,0 +1,68 @@
+﻿{
+  "version": "3.0.0-alpha1",
+  "description": "WOWSharp.BattleNet.Authenticator Class Library",
+  "authors": [ "Sherif" ],
+  "tags": [ "" ],
+  "projectUrl": "",
+  "licenseUrl": "",
+
+  "dependencies": {
+    "Microsoft.Framework.NotNullAttribute.Sources": {
+      "version": "1.0.0-*",
+      "type": "build"
+    },
+    "Newtonsoft.Json": "7.0.1"
+  },
+
+  "frameworks": {
+    "dnx451": {
+      "frameworkAssemblies": {
+        "mscorlib": "4.0.0.0",
+        "System": "4.0.0.0",
+        "System.Core": "4.0.0.0",
+        "Microsoft.CSharp": "4.0.0.0",
+        "System.Net.Http": "4.0.0.0"
+      },
+      "dependencies": {
+        "Microsoft.Framework.DependencyInjection": "1.0.0-beta6",
+        "Microsoft.Framework.Logging": "1.0.0-beta6",
+        "Microsoft.AspNet.DataProtection": "1.0.0-beta6",
+        "Microsoft.Framework.Runtime.Abstractions": "1.0.0-beta6"
+      },
+      "compilationOptions": { "define": [ "LOGGING" ] }
+    },
+    "dnxcore50": {
+      "dependencies": {
+        "System.Runtime": "4.0.20",
+        "System.Collections": "4.0.10",
+        "System.Linq": "4.0.0",
+        "System.Globalization": "4.0.10",
+        "System.Security.Cryptography.RSA": "4.0.0-beta-23109",
+        "System.Security.Cryptography.RandomNumberGenerator": "4.0.0-beta-23109",
+        "System.Net.Http": "4.0.0",
+        "Microsoft.Framework.DependencyInjection": "1.0.0-beta6",
+        "Microsoft.Framework.Logging": "1.0.0-beta6",
+        "Microsoft.AspNet.DataProtection": "1.0.0-beta6",
+        "Microsoft.Framework.Runtime.Abstractions": "1.0.0-beta6",
+        "System.IO": "4.0.10"
+      },
+      "compilationOptions": { "define": [ "LOGGING" ] }
+    },
+    "dotnet": {
+      "dependencies": {
+        "System.Runtime": "4.0.10",
+        "System.Collections": "4.0.0",
+        "System.Linq": "4.0.0",
+        "System.Text.RegularExpressions": "4.0.0",
+        "System.Globalization": "4.0.0",
+        "System.Runtime.Extensions": "4.0.0",
+        "System.Security.Cryptography.RSA": "4.0.0-beta-23109",
+        "System.Net.Http": "4.0.0",
+        "System.Security.Cryptography.RandomNumberGenerator": "4.0.0-beta-23109",
+        "System.Security.Cryptography.Hashing": "4.0.0-beta-23109",
+        "System.Security.Cryptography.Hashing.Algorithms": "4.0.0-beta-23109",
+        "System.IO":  "4.0.0"
+      }
+    }
+  }
+}

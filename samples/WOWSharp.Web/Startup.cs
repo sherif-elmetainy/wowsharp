@@ -54,6 +54,7 @@ namespace WOWSharp.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            
             // Add Entity Framework services to the services container.
             services.AddEntityFramework()
                 .AddSqlServer()
@@ -79,7 +80,8 @@ namespace WOWSharp.Web
                 options.ClientId = Configuration["Authentication:MicrosoftAccount:ClientId"];
                 options.ClientSecret = Configuration["Authentication:MicrosoftAccount:ClientSecret"];
             });
-
+            
+            // WOWSharp configuration
             services.ConfigureBattleNetAuthentication(options =>
             {
                 options.ClientId = Configuration["Authentication:BattleNet:Key"];
@@ -93,8 +95,10 @@ namespace WOWSharp.Web
                 options.ThrowErrorOnMissingMembers = true;
             });
 
-            services.AddScoped<IBattleNetClient, BattleNetClient>();
-            services.AddScoped<WarcraftClient>();
+            services.AddWarcraft();
+            services.AddBattleNetCache();
+            services.AddBattleNetAuthenticator();
+
             // Add MVC services to the services container.
             services.AddMvc();
 
@@ -108,10 +112,11 @@ namespace WOWSharp.Web
         }
 
         // Configure is called after ConfigureServices is called.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationEnvironment appEnv, IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             loggerFactory.MinimumLevel = LogLevel.Information;
             loggerFactory.AddConsole();
+            loggerFactory.AddProvider(new FileLogProvider(appEnv, null));
 
             // Configure the HTTP request pipeline.
 

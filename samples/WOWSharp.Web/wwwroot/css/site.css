@@ -32,3 +32,16 @@ textarea {
         z-index: 10 !important;
     }
 }
+
+.code {
+    display:inline-block;
+    position: relative;
+}
+
+.code > div {
+    height: 2px;
+    background-color: blue;
+    opacity: 0.3;
+    position: absolute;
+    bottom: 0%;
+}
