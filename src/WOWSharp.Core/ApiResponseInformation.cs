@@ -35,7 +35,7 @@ namespace WOWSharp.Core
         /// <summary>
         /// Plan Quota reset date/time (returned by X-Quota-Reset header)
         /// </summary>
-        public DateTime PlanQuotaReset { get; set; }
+        public DateTimeOffset PlanQuotaReset { get; set; }
 
         /// <summary>
         /// Size of the json payload returned

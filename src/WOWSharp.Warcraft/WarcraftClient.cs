@@ -1,8 +1,10 @@
 ﻿using Microsoft.Framework.Internal;
+using System;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WOWSharp.Core;
+using WOWSharp.Core.Serialization;
 
 namespace WOWSharp.Warcraft
 {
@@ -89,5 +91,53 @@ namespace WOWSharp.Warcraft
         }
 
         #endregion
+
+        #region BattleGroups
+
+        /// <summary>
+        ///   Get the battle string to use in the Url for guild and character requests
+        /// </summary>
+        /// <param name="battleGroupName"> Battle Groups </param>
+        /// <returns> battle string to use in Url for arena ladder </returns>
+        public static string GetBattleGroupSlug(string battleGroupName)
+        {
+            return GetSlug(battleGroupName);
+        }
+
+        /// <summary>
+        ///   Get the battlegroups for the region
+        /// </summary>
+        /// <returns> The status of the async operation </returns>
+        public Task<BattleGroupsResponse> GetBattleGroupsAsync()
+        {
+            return _client.GetAsync<BattleGroupsResponse>("wow/data/battlegroups/index");
+        }
+
+        #endregion
+
+        #region Character
+
+        /// <summary>
+        ///   Get character profile information asynchronously
+        /// </summary>
+        /// <param name="realm"> realm name </param>
+        /// <param name="characterName"> character name </param>
+        /// <param name="fieldsToRetrieve"> the profile fields to retrieve </param>
+        /// <param name="callback"> Async callback </param>
+        /// <param name="asyncState"> The user defined state </param>
+        /// <returns> The status of the async operation </returns>
+        public Task<Character> GetCharacterAsync(string realm, string characterName, CharacterFields fieldsToRetrieve)
+        {
+            string[] fields =
+                EnumHelper<CharacterFields>.GetNames().Where(
+                    name =>
+                    name != "All" &&
+                    (fieldsToRetrieve & (CharacterFields)Enum.Parse(typeof(CharacterFields), name, true)) != 0).Select
+                    (name => char.ToLowerInvariant(name[0]) + name.Substring(1)).ToArray();
+            string queryString = fields.Length == 0 ? "" : "?fields=" + string.Join(",", fields);
+            return _client.GetAsync<Character>("wow/character/" + GetRealmSlug(realm) + "/" + Uri.EscapeUriString(characterName) + queryString);
+        }
+
+        #endregion Character
     }
 }

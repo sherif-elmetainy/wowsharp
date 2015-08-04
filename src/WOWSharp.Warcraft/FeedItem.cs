@@ -49,7 +49,7 @@ namespace WOWSharp.Warcraft
         /// </summary>
         [JsonProperty(PropertyName="timestamp")]
         [JsonConverter(typeof(DatetimeMillisecondsConverter))]
-        public DateTime TimeUtc
+        public DateTimeOffset Time
         {
             get;
             set;

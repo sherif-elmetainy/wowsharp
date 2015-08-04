@@ -51,7 +51,7 @@ namespace WOWSharp.Warcraft
         /// </summary>
         [JsonProperty(PropertyName="achievementsCompletedTimestamp", Required = Required.Always)]
         [JsonConverter(typeof(DatetimeMillisecondsConverter))]
-        public IList<DateTime> AchievementsCompletedDatesUtc
+        public IList<DateTimeOffset> AchievementsCompletedDates
         {
             get;
             set;
@@ -82,7 +82,7 @@ namespace WOWSharp.Warcraft
         /// </summary>
         [JsonProperty(PropertyName="criteriaTimestamp", Required = Required.Always)]
         [JsonConverter(typeof(DatetimeMillisecondsConverter))]
-        public IList<DateTime> CriteriaDatesUtc
+        public IList<DateTimeOffset> CriteriaDates
         {
             get;
             set;
@@ -93,7 +93,7 @@ namespace WOWSharp.Warcraft
         /// </summary>
         [JsonProperty(PropertyName="criteriaCreated", Required = Required.Always)]
         [JsonConverter(typeof(DatetimeMillisecondsConverter))]
-        public IList<DateTime> CriteriaCreatedDatesUtc
+        public IList<DateTimeOffset> CriteriaCreatedDates
         {
             get;
             set;

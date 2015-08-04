@@ -63,16 +63,6 @@ namespace WOWSharp.Warcraft
         }
 
         /// <summary>
-        ///   Gets or sets the guild's level
-        /// </summary>
-        [JsonProperty(PropertyName="level", Required = Required.Always)]
-        public int Level
-        {
-            get;
-            set;
-        }
-
-        /// <summary>
         ///   Gets or sets the number of achievement points the guild has earned
         /// </summary>
         [JsonProperty(PropertyName="achievementPoints", Required = Required.Always)]

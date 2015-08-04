@@ -57,7 +57,7 @@ namespace WOWSharp.Warcraft
         /// </summary>
         [JsonProperty(PropertyName="next")]
         [JsonConverter(typeof(DatetimeMillisecondsConverter))]
-        public DateTime NextBattleTimeUtc
+        public DateTimeOffset NextBattleTime
         {
             get;
             set;

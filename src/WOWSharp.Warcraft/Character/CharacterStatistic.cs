@@ -73,7 +73,7 @@ namespace WOWSharp.Warcraft
         /// </summary>
         [JsonProperty(PropertyName="lastUpdated")]
         [JsonConverter(typeof(DatetimeMillisecondsConverter))]
-        public DateTime LastUpdatedTimeUtc
+        public DateTimeOffset LastUpdatedTime
         {
             get;
             set;

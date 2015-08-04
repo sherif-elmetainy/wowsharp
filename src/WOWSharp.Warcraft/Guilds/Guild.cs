@@ -164,11 +164,11 @@ namespace WOWSharp.Warcraft
         //    base.OnDeserialized(client);
         //    if (Members != null)
         //    {
-        //        //long lastModified = (long)(DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)).TotalMilliseconds;
+        //        //long lastModified = (long)(DateTimeOffset.Now - new DateTimeOffset(1970, 1, 1, 0, 0, 0, Timespan.Zero)).TotalMilliseconds;
         //        for (int i = 0; i < Members.Count; i++)
         //        {
         //            Character ch = Members[i].Character;
-        //            ch.LastModifiedUtc = LastModifiedUtc;
+        //            ch.LastModified = LastModified;
         //            ch.Client = client;
         //            ch.Path = "/api/wow/character/" + WowClient.GetRealmSlug(ch.Realm) + "/" +
         //                      Uri.EscapeUriString(ch.Name);

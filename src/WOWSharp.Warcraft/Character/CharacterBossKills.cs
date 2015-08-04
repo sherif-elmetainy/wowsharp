@@ -104,7 +104,7 @@ namespace WOWSharp.Warcraft
         /// </summary>
         [JsonProperty(PropertyName="heroicTimestamp")]
         [JsonConverter(typeof(DatetimeMillisecondsConverter))]
-        public DateTime? HeroicFirstKillUtc
+        public DateTimeOffset? HeroicFirstKill
         {
             get;
             set;
@@ -117,7 +117,7 @@ namespace WOWSharp.Warcraft
         /// </summary>
         [JsonProperty(PropertyName="flexTimestamp")]
         [JsonConverter(typeof(DatetimeMillisecondsConverter))]
-        public DateTime? FlexFirstKillUtc
+        public DateTimeOffset? FlexFirstKill
         {
             get;
             set;
@@ -130,7 +130,7 @@ namespace WOWSharp.Warcraft
         /// </summary>
         [JsonProperty(PropertyName="lfrTimestamp")]
         [JsonConverter(typeof(DatetimeMillisecondsConverter))]
-        public DateTime? LfrFirstKillUtc
+        public DateTimeOffset? LfrFirstKill
         {
             get;
             set;
@@ -142,7 +142,7 @@ namespace WOWSharp.Warcraft
         /// </summary>
         [JsonProperty(PropertyName="normalTimestamp")]
         [JsonConverter(typeof(DatetimeMillisecondsConverter))]
-        public DateTime? NormalFirstKillUtc
+        public DateTimeOffset? NormalFirstKill
         {
             get;
             set;

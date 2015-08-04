@@ -40,7 +40,7 @@ namespace WOWSharp.Core.Serialization
         /// <summary>
         ///   Reference date for Unix time
         /// </summary>
-        private static readonly DateTime _unixStartDate = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+        private static readonly DateTimeOffset _unixStartDate = new DateTimeOffset(1970, 1, 1, 0, 0, 0, TimeSpan.Zero);
 
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace WOWSharp.Core.Serialization
         /// <returns></returns>
         public override bool CanConvert(Type objectType)
         {
-            return objectType == typeof(long) || objectType == typeof(DateTime);
+            return objectType == typeof(long) || objectType == typeof(DateTimeOffset);
         }
 
         /// <summary>
@@ -72,7 +72,7 @@ namespace WOWSharp.Core.Serialization
         /// </summary>
         /// <param name="reader">Json reader</param>
         /// <param name="objectType">object type (should always be datetime)</param>
-        /// <param name="existingValue">existing value Ignored. (should always be DateTime.MinValue).</param>
+        /// <param name="existingValue">existing value Ignored. (should always be DateTimeOffset.MinValue).</param>
         /// <param name="serializer">serializer object (used to read settings)</param>
         /// <returns>Deserialized object</returns>
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
@@ -81,18 +81,18 @@ namespace WOWSharp.Core.Serialization
                 throw new ArgumentNullException("objectType");
             if (reader == null)
                 throw new ArgumentNullException("reader");
-            if (objectType == typeof(IList<DateTime>) || objectType == typeof(IList<DateTime?>))
+            if (objectType == typeof(IList<DateTimeOffset>) || objectType == typeof(IList<DateTimeOffset?>))
             {
                 if (reader.TokenType == JsonToken.Null)
                     return null;
                 else if (reader.TokenType == JsonToken.StartArray)
                 {
-                    var elementType = objectType == typeof(IList<DateTime>) ? typeof(DateTime) : typeof(DateTime?);
+                    var elementType = objectType == typeof(IList<DateTimeOffset>) ? typeof(DateTimeOffset) : typeof(DateTimeOffset?);
                     IList list;
-                    if (elementType == typeof(DateTime))
-                        list = new List<DateTime>();
+                    if (elementType == typeof(DateTimeOffset))
+                        list = new List<DateTimeOffset>();
                     else
-                        list = new List<DateTime?>();
+                        list = new List<DateTimeOffset?>();
                     while (reader.Read())
                     {
                         if (reader.TokenType == JsonToken.EndArray)
@@ -106,9 +106,9 @@ namespace WOWSharp.Core.Serialization
                     throw new ArgumentException($"Expecting token of type '{JsonToken.StartArray}', and found a token of type {reader.TokenType}.");
                 }
             }
-            else if (objectType != typeof(DateTime) && objectType != typeof(DateTime?))
+            else if (objectType != typeof(DateTimeOffset) && objectType != typeof(DateTimeOffset?))
             {
-                throw new ArgumentException($"Cannot convert type '{objectType.FullName}', can only convert {typeof(DateTime).Name} and and {typeof(DateTime?).Name}.");
+                throw new ArgumentException($"Cannot convert type '{objectType.FullName}', can only convert {typeof(DateTimeOffset).Name} and and {typeof(DateTimeOffset?).Name}.");
             }
 
             return ReadDateToken(reader, objectType);
@@ -122,7 +122,7 @@ namespace WOWSharp.Core.Serialization
         /// <returns>date object</returns>
         private object ReadDateToken(JsonReader reader, Type objectType)
         {
-            if (objectType == typeof(DateTime?) && reader.TokenType == JsonToken.Null)
+            if (objectType == typeof(DateTimeOffset?) && reader.TokenType == JsonToken.Null)
                 return null;
             if (reader.TokenType == JsonToken.Date)
             {
@@ -155,9 +155,9 @@ namespace WOWSharp.Core.Serialization
                 throw new ArgumentNullException("writer");
             if (value == null)
                 writer.WriteNull();
-            else if (value is DateTime)
+            else if (value is DateTimeOffset)
             {
-                var date = (DateTime)value;
+                var date = (DateTimeOffset)value;
                 if (_isMilliseconds)
                 {
                     writer.WriteValue(GetUnixTimeFromDateMilliseconds(date));
@@ -173,7 +173,7 @@ namespace WOWSharp.Core.Serialization
             }
             else
             {
-                var dateTimeList = value as IList<DateTime>;
+                var dateTimeList = value as IList<DateTimeOffset>;
                 if (dateTimeList != null)
                 {
                     writer.WriteStartArray();
@@ -192,7 +192,7 @@ namespace WOWSharp.Core.Serialization
                 }
                 else
                 {
-                    var nullableDateTimeList = value as IList<DateTime?>;
+                    var nullableDateTimeList = value as IList<DateTimeOffset?>;
                     if (nullableDateTimeList != null)
                     {
                         writer.WriteStartArray();
@@ -213,18 +213,18 @@ namespace WOWSharp.Core.Serialization
                     }
                     else
                     {
-                        throw new ArgumentOutOfRangeException("value", $"Cannot convert type '{value.GetType().FullName}', can only convert {typeof(DateTime).Name} and and {typeof(DateTime?).Name}.");
+                        throw new ArgumentOutOfRangeException("value", $"Cannot convert type '{value.GetType().FullName}', can only convert {typeof(DateTimeOffset).Name} and and {typeof(DateTimeOffset?).Name}.");
                     }
                 }
             }
         }
 
         /// <summary>
-        ///   Gets the Utc DateTime object from the Unix time returned by the API
+        ///   Gets the Utc DateTimeOffset object from the Unix time returned by the API
         /// </summary>
         /// <param name="value"> time value returned by API </param>
         /// <returns> Utc time object </returns>
-        internal static DateTime GetUtcDateFromUnixTimeMilliseconds(long value)
+        internal static DateTimeOffset GetUtcDateFromUnixTimeMilliseconds(long value)
         {
             return _unixStartDate.AddMilliseconds(value);
         }
@@ -234,17 +234,17 @@ namespace WOWSharp.Core.Serialization
         /// </summary>
         /// <param name="date"> date time object </param>
         /// <returns> Unix time value </returns>
-        internal static long GetUnixTimeFromDateMilliseconds(DateTime date)
+        internal static long GetUnixTimeFromDateMilliseconds(DateTimeOffset date)
         {
             return (long)Math.Round((date - _unixStartDate).TotalMilliseconds, 0);
         }
 
         /// <summary>
-        ///   Gets the Utc DateTime object from the Unix time returned by the API
+        ///   Gets the Utc DateTimeOffset object from the Unix time returned by the API
         /// </summary>
         /// <param name="value"> time value returned by API </param>
         /// <returns> Utc time object </returns>
-        internal static DateTime GetUtcDateFromUnixTimeSeconds(long value)
+        internal static DateTimeOffset GetUtcDateFromUnixTimeSeconds(long value)
         {
             return _unixStartDate.AddSeconds(value);
         }
@@ -254,7 +254,7 @@ namespace WOWSharp.Core.Serialization
         /// </summary>
         /// <param name="date"> date time object </param>
         /// <returns> Unix time value </returns>
-        internal static long GetUnixTimeFromDateSeconds(DateTime date)
+        internal static long GetUnixTimeFromDateSeconds(DateTimeOffset date)
         {
             return (long)Math.Round((date - _unixStartDate).TotalSeconds, 0);
         }

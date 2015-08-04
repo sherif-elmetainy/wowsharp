@@ -40,7 +40,7 @@ namespace WOWSharp.Warcraft
         /// </summary>
         [JsonProperty(PropertyName="date")]
         [JsonConverter(typeof(IsoDateTimeConverter))]
-        public DateTime? DateUtc
+        public DateTimeOffset? Date
         {
             get;
             set;

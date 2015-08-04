@@ -60,7 +60,7 @@ namespace WOWSharp.Web.Services
 
             private void DoWriteMessage(string message)
             {
-                var date = DateTime.Now;
+                var date = DateTimeOffset.Now;
                 var filename = date.ToString("yyyyMMdd", CultureInfo.InvariantCulture) + ".log";
                 var file = Path.Combine(_folder, filename);
                 var finalMessage = $"{date:HH:mm:ss} {message}";

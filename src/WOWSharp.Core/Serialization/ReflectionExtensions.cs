@@ -67,9 +67,7 @@ namespace WOWSharp.Core.Serialization
         internal static EnumMemberAttribute GetEnumMemberAttribute(this FieldInfo fieldInfo)
         {
             var attrs = fieldInfo.GetCustomAttributes(true);
-            if (attrs == null)
-                return null;
-            return attrs.OfType<EnumMemberAttribute>().FirstOrDefault();
+            return attrs?.OfType<EnumMemberAttribute>().FirstOrDefault() ?? new EnumMemberAttribute() { Value = fieldInfo.Name };
         }
 
 #if DOTNET

@@ -21,7 +21,10 @@
 #endregion
 
 using System;
+using System.Globalization;
 using System.Linq;
+using System.Threading;
+using WOWSharp.Interfaces;
 using WOWSharp.Warcraft;
 using Xunit;
 
@@ -29,7 +32,7 @@ namespace WOWSharp.Test.Warcraft
 {
     // This project can output the Class library as a NuGet Package.
     // To enable this option, right-click on the project and select the Properties menu item. In the Build tab select "Produce outputs on build".
-    public class RealmApi
+    public class RealmTests
     {
         [Fact]
         public void TestRealmsAsync()
@@ -61,8 +64,10 @@ namespace WOWSharp.Test.Warcraft
             Assert.NotNull(tolBarad);
             Assert.True(tolBarad.AreaId > 0);
             Assert.True(tolBarad.ControllingFaction != Faction.Neutral);
-            Assert.True(tolBarad.NextBattleTimeUtc.Year == DateTime.Now.Year);
+            Assert.True(tolBarad.NextBattleTime.Year == DateTimeOffset.Now.Year);
             Assert.True(tolBarad.Status != PvpZoneStatus.Unknown);
         }
+
+        
     }
 }

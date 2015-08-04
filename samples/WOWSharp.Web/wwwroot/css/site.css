@@ -41,7 +41,6 @@ textarea {
 .code > div {
     height: 2px;
     background-color: blue;
-    opacity: 0.3;
     position: absolute;
     bottom: 0%;
 }
