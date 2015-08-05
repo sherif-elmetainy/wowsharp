@@ -26,7 +26,11 @@
     "Microsoft.Framework.Logging": "1.0.0-beta6",
     "Microsoft.Framework.Logging.Console": "1.0.0-beta6",
     "Microsoft.VisualStudio.Web.BrowserLink.Loader": "14.0.0-beta6",
-    "Microsoft.Framework.NotNullAttribute.Sources": { "version": "1.0.0-*", "type": "build" },
+    "Microsoft.Framework.NotNullAttribute.Sources": {
+      "version": "1.0.0-*",
+      "type": "build"
+    },
+    "Kestrel": "1.0.0-beta6",
     "WOWSharp.AspNet.Authentication.BattleNet": "3.0.0-*",
     "WOWSharp": "3.0.0-*",
     "WOWSharp.BattleNet.Authenticator": "3.0.0-*"
@@ -34,7 +38,8 @@
 
   "commands": {
     "web": "Microsoft.AspNet.Hosting --config hosting.ini",
-    "ef": "EntityFramework.Commands"
+    "ef": "EntityFramework.Commands",
+    "Kestrel": "Microsoft.AspNet.Hosting --server Kestrel --server.urls http://localhost:5104"
   },
 
   "frameworks": {
