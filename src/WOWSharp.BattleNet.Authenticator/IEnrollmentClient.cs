@@ -22,7 +22,6 @@
 
 using System;
 using System.Threading.Tasks;
-using Microsoft.Framework.Internal;
 
 namespace WOWSharp.BattleNet.Authenticator
 {

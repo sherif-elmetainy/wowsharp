@@ -20,11 +20,12 @@
 // THE SOFTWARE.
 #endregion
 
+using System;
 using Microsoft.Framework.Internal;
 using Microsoft.Framework.OptionsModel;
-using System;
 using WOWSharp.AspNet.Authentication.BattleNet;
 
+// ReSharper disable once CheckNamespace
 namespace Microsoft.AspNet.Builder
 {
     /// <summary>

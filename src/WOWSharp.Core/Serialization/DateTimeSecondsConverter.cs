@@ -20,12 +20,6 @@
 // THE SOFTWARE.
 #endregion
 
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
 namespace WOWSharp.Core.Serialization
 {
     /// <summary>

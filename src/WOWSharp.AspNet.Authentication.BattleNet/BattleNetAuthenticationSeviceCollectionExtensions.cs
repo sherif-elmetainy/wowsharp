@@ -20,12 +20,13 @@
 // THE SOFTWARE.
 #endregion
 
+using System;
 using Microsoft.Framework.Configuration;
 using Microsoft.Framework.Internal;
-using System;
 using WOWSharp.AspNet.Authentication.BattleNet;
 using WOWSharp.Interfaces;
 
+// ReSharper disable once CheckNamespace
 namespace Microsoft.Framework.DependencyInjection
 {
     /// <summary>

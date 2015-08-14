@@ -22,12 +22,10 @@
 
 #if LOGGING
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Framework.Caching.Memory;
-using WOWSharp.Interfaces;
 using Microsoft.Framework.Internal;
+using WOWSharp.Interfaces;
 
 namespace WOWSharp.Core
 {

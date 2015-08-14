@@ -22,8 +22,8 @@
 
 using System;
 using System.Collections.Generic;
-using System.Reflection;
 using System.Linq;
+using System.Reflection;
 
 namespace WOWSharp.Core.Serialization
 {
@@ -67,7 +67,7 @@ namespace WOWSharp.Core.Serialization
         internal static EnumMemberAttribute GetEnumMemberAttribute(this FieldInfo fieldInfo)
         {
             var attrs = fieldInfo.GetCustomAttributes(true);
-            return attrs?.OfType<EnumMemberAttribute>().FirstOrDefault() ?? new EnumMemberAttribute() { Value = fieldInfo.Name };
+            return attrs.OfType<EnumMemberAttribute>().FirstOrDefault() ?? new EnumMemberAttribute() { Value = fieldInfo.Name };
         }
 
 #if DOTNET

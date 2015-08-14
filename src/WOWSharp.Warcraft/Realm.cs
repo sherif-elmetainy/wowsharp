@@ -18,10 +18,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 using System.Collections.Generic;
 using System.Globalization;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace WOWSharp.Warcraft
 {
@@ -146,24 +146,12 @@ namespace WOWSharp.Warcraft
         /// <summary>
         ///   Gets whether the realm is PVP enabled
         /// </summary>
-        public bool IsPvp
-        {
-            get
-            {
-                return (RealmType & RealmTypes.Pvp) != 0;
-            }
-        }
+        public bool IsPvp => (RealmType & RealmTypes.Pvp) != 0;
 
         /// <summary>
         ///   Gets whether the realm has Role Play rule
         /// </summary>
-        public bool IsRP
-        {
-            get
-            {
-                return (RealmType & RealmTypes.RP) != 0;
-            }
-        }
+        public bool IsRP => (RealmType & RealmTypes.RP) != 0;
 
         [JsonProperty(PropertyName = "connected_realms")]
         public IList<string> ConnectedRealms { get; set; }

@@ -31,29 +31,21 @@
         "System.Runtime.Serialization": "4.0.0.0"
       },
       "dependencies": {
-        "Microsoft.Framework.NotNullAttribute.Sources": {
-          "version": "1.0.0-*",
-          "type": "build"
-        },
         "Microsoft.Framework.Logging": "1.0.0-beta6",
         "Microsoft.Framework.DependencyInjection.Abstractions": "1.0.0-beta6",
         "Microsoft.Framework.DependencyInjection": "1.0.0-beta6"
       },
-      "compilationOptions": { "define": [ "NOTNULL", "DI", "LOGGING" ] }
+      "compilationOptions": { "define": [ "DI", "LOGGING" ] }
     },
     "dnxcore50": {
       "dependencies": {
         "System.Runtime": "4.0.20",
         "System.Collections": "4.0.10",
-        "Microsoft.Framework.NotNullAttribute.Sources": {
-          "version": "1.0.0-*",
-          "type": "build"
-        },
         "Microsoft.Framework.Logging": "1.0.0-beta6",
         "Microsoft.Framework.DependencyInjection.Abstractions": "1.0.0-beta6",
         "Microsoft.Framework.DependencyInjection": "1.0.0-beta6"
       },
-      "compilationOptions": { "define": [ "NOTNULL", "DI", "LOGGING" ] }
+      "compilationOptions": { "define": [ "DI", "LOGGING" ] }
     },
     "dotnet": {
       "dependencies": {
@@ -61,13 +53,9 @@
         "System.Collections": "4.0.0",
         "System.Runtime.Extensions": "4.0.0",
         "System.Linq": "4.0.0",
-        "System.Globalization": "4.0.0",
-        "Microsoft.Framework.NotNullAttribute.Sources": {
-          "version": "1.0.0-*",
-          "type": "build"
-        }
+        "System.Globalization": "4.0.0"
       },
-      "compilationOptions": { "define": [ "NOTNULL"] }
+      "compilationOptions": { "define": [ ] }
     }
   }
 }

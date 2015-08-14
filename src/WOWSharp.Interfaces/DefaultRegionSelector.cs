@@ -40,7 +40,7 @@ namespace WOWSharp.Interfaces
         /// <summary>
         ///   A dictionary to lookup region by current thread's culture
         /// </summary>
-        private static readonly Dictionary<string, Region> _defaultRegions =
+        private static readonly Dictionary<string, Region> DefaultRegions =
             new Dictionary<string, Region>(StringComparer.OrdinalIgnoreCase)
                 {
                     {"af-ZA", EU}, // Afrikaans (South Africa)
@@ -258,7 +258,7 @@ namespace WOWSharp.Interfaces
         /// <summary>
         ///   A dictionary to lookup regions by name
         /// </summary>
-        private static readonly Dictionary<string, Region> _regionsDict =
+        private static readonly Dictionary<string, Region> RegionsDictionary =
             new Dictionary<string, Region>(StringComparer.OrdinalIgnoreCase)
                 {
                     {"EU", EU},
@@ -275,7 +275,7 @@ namespace WOWSharp.Interfaces
         public virtual Region GetDefaultRegion()
         {
             string cultureName = CultureInfo.CurrentCulture.Name;
-            return _defaultRegions[cultureName];
+            return DefaultRegions[cultureName];
         }
 
         /// <summary>
@@ -287,7 +287,7 @@ namespace WOWSharp.Interfaces
         {
             if (string.IsNullOrEmpty(regionName))
                 return GetDefaultRegion();
-            return _regionsDict[regionName];
+            return RegionsDictionary[regionName];
         }
     }
 }

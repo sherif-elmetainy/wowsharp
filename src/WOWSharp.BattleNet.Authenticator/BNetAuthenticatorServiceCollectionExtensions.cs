@@ -21,15 +21,10 @@
 #endregion
 
 #if !DOTNET
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.Framework.DependencyInjection;
-using System.Net.Http;
 using Microsoft.Framework.Internal;
 using WOWSharp.BattleNet.Authenticator;
 
+// ReSharper disable once CheckNamespace
 namespace Microsoft.Framework.DependencyInjection
 {
     /// <summary>

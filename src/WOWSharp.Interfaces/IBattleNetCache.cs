@@ -21,8 +21,6 @@
 #endregion
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace WOWSharp.Interfaces
@@ -47,6 +45,7 @@ namespace WOWSharp.Interfaces
         /// </summary>
         /// <param name="key"> Identifier for this CacheItem </param>
         /// <param name="value"> Value to be stored in cache. </param>
+        /// <param name="options">caching options</param>
         /// <exception cref="ArgumentNullException">Provided key is null</exception>
         /// <exception cref="ArgumentException">Provided key is an empty string</exception>
         Task SetAsync(string key, object value, BattleNetCacheOptions options);

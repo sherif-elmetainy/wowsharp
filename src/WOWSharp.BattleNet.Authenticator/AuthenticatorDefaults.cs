@@ -20,18 +20,16 @@
 // THE SOFTWARE.
 #endregion
 
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace WOWSharp.BattleNet.Authenticator
 {
     public class AuthenticatorDefaults
     {
         public static IReadOnlyCollection<string> Regions { get; } = new ReadOnlyCollection<string>(
-                new string[] { "US", "EU", "TW", "KR", "CN" }
+                new[] { "US", "EU", "TW", "KR", "CN" }
             );
 
         public static string SerialValidationExpression { get; } = InitSerialValidationExpression();

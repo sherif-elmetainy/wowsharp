@@ -26,12 +26,10 @@
 
 #endregion
 
-using Microsoft.Framework.Internal;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
+using Microsoft.Framework.Internal;
 
 namespace WOWSharp.BattleNet.Authenticator
 {

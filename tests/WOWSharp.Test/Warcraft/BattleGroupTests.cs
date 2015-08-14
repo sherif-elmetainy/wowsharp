@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
+﻿using System.Globalization;
 using System.Threading;
-using System.Threading.Tasks;
 using WOWSharp.Interfaces;
 using WOWSharp.Warcraft;
 using Xunit;
@@ -34,6 +30,7 @@ namespace WOWSharp.Test.Warcraft
                     Assert.Equal(battleGroup.Slug, WarcraftClient.GetBattleGroupSlug(battleGroup.Name));
                 }
             }
+            Thread.CurrentThread.CurrentCulture = originalCulture;
         }
     }
 }

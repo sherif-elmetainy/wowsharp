@@ -48,7 +48,7 @@ namespace WOWSharp.Warcraft
         /// <returns> Gets string representation (for debugging purposes) </returns>
         public override string ToString()
         {
-            return string.Format(CultureInfo.CurrentCulture, "Realm Count = {0}", Realms == null ? 0 : Realms.Count);
+            return string.Format(CultureInfo.CurrentCulture, "Realm Count = {0}", Realms?.Count ?? 0);
         }
     }
 }

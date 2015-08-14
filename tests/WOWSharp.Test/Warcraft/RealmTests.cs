@@ -21,10 +21,7 @@
 #endregion
 
 using System;
-using System.Globalization;
 using System.Linq;
-using System.Threading;
-using WOWSharp.Interfaces;
 using WOWSharp.Warcraft;
 using Xunit;
 
@@ -44,28 +41,30 @@ namespace WOWSharp.Test.Warcraft
             RealmStatusResponse response2 = task.Result;
             Assert.Same(response, response2);
             Assert.NotNull(response);
-            Assert.True(new RealmStatusResponse().ToString().Contains('0'));
+            Assert.Contains("0", new RealmStatusResponse().ToString());
             Assert.NotNull(response.ToString());
             Assert.NotNull(response.Realms);
             Assert.NotEmpty(response.Realms);
-            Assert.True(response.Realms.Any(r => r.IsPvp));
-            Assert.True(response.Realms.Any(r => r.IsRP));
-            Assert.True(response.Realms.All(r => r.Locale != null));
-            Assert.True(response.Realms.All(r => r.Name != null));
-            Assert.True(!response.Realms.Any(r => r.ToString() == null));
-            Assert.True(response.Realms.All(r => r.Slug != null));
-            Assert.True(response.Realms.All(r => r.BattleGroupName != null));
-            Assert.True(response.Realms.Any(r => r.Status));
-            Assert.True(response.Realms.All(r => r.TimeZone != null));
-            Assert.True(response.Realms.Any(r => r.WinterGrasp != null));
+            Assert.Contains(response.Realms, r => r.IsPvp);
+            Assert.Contains(response.Realms, r => r.IsRP);
+            Assert.DoesNotContain(response.Realms, r => r.Locale == null);
+            Assert.DoesNotContain(response.Realms, r => r.Name == null);
+            Assert.DoesNotContain(response.Realms, r => r.Slug == null);
+            Assert.DoesNotContain(response.Realms, r => r.BattleGroupName == null);
+            Assert.Contains(response.Realms, r => r.Status);
+            Assert.DoesNotContain(response.Realms, r => r.TimeZone == null);
+            Assert.DoesNotContain(response.Realms, r => r.WinterGrasp == null);
 
             var tolBarad = response.Realms.Where(r => r.TolBarad != null
                                                       && r.Status).Select(r => r.TolBarad).FirstOrDefault();
             Assert.NotNull(tolBarad);
-            Assert.True(tolBarad.AreaId > 0);
-            Assert.True(tolBarad.ControllingFaction != Faction.Neutral);
-            Assert.True(tolBarad.NextBattleTime.Year == DateTimeOffset.Now.Year);
-            Assert.True(tolBarad.Status != PvpZoneStatus.Unknown);
+            if (tolBarad != null)
+            {
+                Assert.True(tolBarad.AreaId > 0);
+                Assert.NotEqual(Faction.Neutral, tolBarad.ControllingFaction);
+                Assert.Equal(DateTimeOffset.Now.Year,  tolBarad.NextBattleTime.Year);
+                Assert.NotEqual(PvpZoneStatus.Unknown, tolBarad.Status);
+            }
         }
 
         

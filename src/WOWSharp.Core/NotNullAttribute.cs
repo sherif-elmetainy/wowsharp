@@ -20,9 +20,9 @@
 // THE SOFTWARE.
 #endregion
 
-#if !NOTNULL
 using System;
 
+// ReSharper disable once CheckNamespace
 namespace Microsoft.Framework.Internal
 {
     [AttributeUsage(AttributeTargets.Parameter)]
@@ -30,4 +30,3 @@ namespace Microsoft.Framework.Internal
     {
     }
 }
-#endif

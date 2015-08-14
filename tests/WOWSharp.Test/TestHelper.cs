@@ -21,15 +21,12 @@
 #endregion
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Globalization;
+using System.Threading;
+using Microsoft.Framework.Configuration;
 using Microsoft.Framework.DependencyInjection;
 using WOWSharp.Core;
 using WOWSharp.Warcraft;
-using Microsoft.Framework.Configuration;
-using System.Net.Http;
-using WOWSharp.Interfaces;
 
 namespace WOWSharp.Test
 {
@@ -37,6 +34,7 @@ namespace WOWSharp.Test
     {
         private static IServiceProvider CreateServiceProvider()
         {
+            Thread.CurrentThread.CurrentCulture = new CultureInfo("en-gb");
             var builder = new ConfigurationBuilder(".").AddUserSecrets();
             var configuration = builder.Build();
 

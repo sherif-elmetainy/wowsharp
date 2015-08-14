@@ -1,8 +1,8 @@
-﻿using Microsoft.Framework.Internal;
-using System;
+﻿using System;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Framework.Internal;
 using WOWSharp.Core;
 using WOWSharp.Core.Serialization;
 
@@ -123,8 +123,6 @@ namespace WOWSharp.Warcraft
         /// <param name="realm"> realm name </param>
         /// <param name="characterName"> character name </param>
         /// <param name="fieldsToRetrieve"> the profile fields to retrieve </param>
-        /// <param name="callback"> Async callback </param>
-        /// <param name="asyncState"> The user defined state </param>
         /// <returns> The status of the async operation </returns>
         public Task<Character> GetCharacterAsync(string realm, string characterName, CharacterFields fieldsToRetrieve)
         {

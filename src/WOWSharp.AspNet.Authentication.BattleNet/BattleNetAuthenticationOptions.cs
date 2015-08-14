@@ -20,16 +20,14 @@
 // THE SOFTWARE.
 #endregion
 
+using System;
+using System.Net.Http;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.AspNet.Authentication.OAuth;
 using Microsoft.AspNet.Http;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Threading.Tasks;
-using WOWSharp.Interfaces;
-using System.Threading;
 using Microsoft.Framework.Internal;
+using WOWSharp.Interfaces;
 
 namespace WOWSharp.AspNet.Authentication.BattleNet
 {

@@ -21,13 +21,13 @@
 #endregion
 
 using Microsoft.AspNet.Authentication;
-using Microsoft.Framework.OptionsModel;
-using Microsoft.Framework.Logging;
-using Microsoft.Framework.WebEncoders;
-using Microsoft.AspNet.DataProtection;
-using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Authentication.OAuth;
+using Microsoft.AspNet.Builder;
+using Microsoft.AspNet.DataProtection;
 using Microsoft.Framework.Internal;
+using Microsoft.Framework.Logging;
+using Microsoft.Framework.OptionsModel;
+using Microsoft.Framework.WebEncoders;
 using WOWSharp.Interfaces;
 
 namespace WOWSharp.AspNet.Authentication.BattleNet

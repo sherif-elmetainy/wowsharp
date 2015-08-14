@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using WOWSharp.Warcraft;
 using Xunit;
 
@@ -28,9 +25,9 @@ namespace WOWSharp.Test.Warcraft
             Assert.Null(character.Stats);
 
             Assert.NotNull(character.Professions.PrimaryProfessions);
-            Assert.Equal(character.Professions.PrimaryProfessions.Count, 2);
-            Assert.True(character.Professions.PrimaryProfessions.Any(p => p.Id == TestConstants.TestProfession1));
-            Assert.True(character.Professions.PrimaryProfessions.Any(p => p.Id == TestConstants.TestProfession2));
+            Assert.Equal(2, character.Professions.PrimaryProfessions.Count);
+            Assert.Contains(character.Professions.PrimaryProfessions, p => p.Id == TestConstants.TestProfession1);
+            Assert.Contains(character.Professions.PrimaryProfessions, p => p.Id == TestConstants.TestProfession2);
             foreach (var profession in character.Professions.PrimaryProfessions)
             {
                 Assert.NotNull(profession.Name);
@@ -44,7 +41,7 @@ namespace WOWSharp.Test.Warcraft
             Assert.NotNull(character.Professions.ToString());
 
             Assert.NotNull(character.Professions.SecondaryProfessions);
-            Assert.Equal(character.Professions.SecondaryProfessions.Count, 4);
+            Assert.Equal(4, character.Professions.SecondaryProfessions.Count);
 
             foreach (var profession in character.Professions.SecondaryProfessions)
             {
@@ -126,9 +123,9 @@ namespace WOWSharp.Test.Warcraft
                                                 CharacterFields.Mounts).Result;
             Assert.NotNull(character.Mounts);
             Assert.NotNull(character.Mounts.Collected);
-            Assert.NotEqual(character.Mounts.Collected.Count, 0);
-            Assert.NotEqual(character.Mounts.NotCollectedCount, 0);
-            Assert.NotEqual(character.Mounts.CollectedCount, 0);
+            Assert.NotEqual(0, character.Mounts.Collected.Count);
+            Assert.NotEqual(0, character.Mounts.NotCollectedCount);
+            Assert.NotEqual(0, character.Mounts.CollectedCount);
             Assert.Equal(character.Mounts.CollectedCount, character.Mounts.Collected.Count);
         }
 
@@ -251,7 +248,7 @@ namespace WOWSharp.Test.Warcraft
                                                 CharacterFields.Progression).Result;
             Assert.NotNull(character.Progression);
             Assert.NotNull(character.Progression.Raids);
-            Assert.NotEqual(character.Progression.Raids.Count, 0);
+            Assert.NotEqual(0, character.Progression.Raids.Count);
 
             foreach (var raid in character.Progression.Raids)
             {
@@ -259,7 +256,7 @@ namespace WOWSharp.Test.Warcraft
                 Assert.True(raid.Id > 0);
                 Assert.NotNull(raid.Name);
                 Assert.NotNull(raid.Bosses);
-                Assert.NotEqual(raid.Bosses.Count, 0);
+                Assert.NotEqual(0, raid.Bosses.Count);
 
                 foreach (var boss in raid.Bosses)
                 {
@@ -317,8 +314,8 @@ namespace WOWSharp.Test.Warcraft
             Assert.Null(character.Stats);
 
             Assert.True(character.Guild.AchievementPoints > 0);
-            Assert.Equal(character.Guild.Name, TestConstants.TestGuildName, true);
-            Assert.Equal(character.Guild.Realm, TestConstants.TestRealmName, true);
+            Assert.Equal(TestConstants.TestGuildName, character.Guild.Name, true);
+            Assert.Equal(TestConstants.TestRealmName, character.Guild.Realm, true);
             Assert.NotNull(character.Guild.Emblem);
             Assert.NotNull(character.Guild.Emblem.BackgroundColor);
             Assert.NotNull(character.Guild.Emblem.BorderColor);
@@ -355,14 +352,14 @@ namespace WOWSharp.Test.Warcraft
             Assert.NotNull(character.Talents);
             Assert.NotNull(character.Statistics);
 
-            Assert.Equal(character.Class, TestConstants.TestClass);
+            Assert.Equal(TestConstants.TestClass, character.Class);
             Assert.True(character.Level >= 85);
-            Assert.Equal(character.Race, TestConstants.TestRace);
+            Assert.Equal(TestConstants.TestRace, character.Race);
             Assert.True(character.AchievementPoints > 0);
-            Assert.Equal(character.Gender, TestConstants.TestGender);
+            Assert.Equal(TestConstants.TestGender, character.Gender);
 
-            Assert.Equal(character.Realm, TestConstants.TestRealmName, true);
-            Assert.Equal(character.Name, TestConstants.TestCharacterName, true);
+            Assert.Equal(TestConstants.TestRealmName, character.Realm, true);
+            Assert.Equal(TestConstants.TestCharacterName, character.Name, true);
         }
 
         /// <summary>
@@ -383,14 +380,14 @@ namespace WOWSharp.Test.Warcraft
             Assert.Null(character.Pvp);
             Assert.Null(character.Stats);
 
-            Assert.Equal(character.Class, TestConstants.TestClass);
+            Assert.Equal(TestConstants.TestClass, character.Class);
             Assert.True(character.Level >= 85);
-            Assert.Equal(character.Race, TestConstants.TestRace);
+            Assert.Equal(TestConstants.TestRace, character.Race);
             Assert.True(character.AchievementPoints > 0);
-            Assert.Equal(character.Gender, TestConstants.TestGender);
+            Assert.Equal(TestConstants.TestGender, character.Gender);
 
-            Assert.Equal(character.Realm, TestConstants.TestRealmName, true);
-            Assert.Equal(character.Name, TestConstants.TestCharacterName, true);
+            Assert.Equal(TestConstants.TestRealmName, character.Realm, true);
+            Assert.Equal(TestConstants.TestCharacterName, character.Name, true);
         }
 
         /// <summary>
@@ -411,12 +408,12 @@ namespace WOWSharp.Test.Warcraft
             var category = character.Statistics.Subcategories[0];
 
             Assert.NotNull(category);
-            Assert.False(category.Statistics.Any(s => s == null));
-            Assert.False(category.Statistics.Any(s => s.IsMoney));
-            Assert.False(category.Statistics.Any(s => string.IsNullOrWhiteSpace(s.Name)));
-            Assert.False(category.Statistics.Any(s => s.Quantity <= 0));
-            Assert.False(category.Statistics.Any(s => s.Id <= 0));
-            Assert.False(category.Statistics.Any(s => s.LastUpdatedTime.Year < 2000));
+            Assert.DoesNotContain(category.Statistics, s => s == null);
+            Assert.DoesNotContain(category.Statistics, s => s.IsMoney);
+            Assert.DoesNotContain(category.Statistics, s => string.IsNullOrEmpty(s.Name));
+            Assert.DoesNotContain(category.Statistics, s => s.Quantity <= 0);
+            Assert.DoesNotContain(category.Statistics, s => s.Id <= 0);
+            Assert.DoesNotContain(category.Statistics, s => s.LastUpdatedTime.Year < 2000);
         }
 
         /// <summary>
@@ -479,10 +476,8 @@ namespace WOWSharp.Test.Warcraft
 
             item = character.Items.Chest;
             Assert.NotNull(item.Parameters);
-            Assert.True(item.Parameters.Enchant.HasValue);
-            Assert.True(item.Parameters.Enchant.Value > 0);
-            Assert.True(item.Parameters.Gem0.HasValue);
-            Assert.True(item.Parameters.Gem0.Value > 0);
+            Assert.True(item.Parameters.Enchant != null && item.Parameters.Enchant.Value > 0);
+            Assert.True(item.Parameters.Gem0 != null && item.Parameters.Gem0.Value > 0);
             //Assert.True(item.Parameters.Gem1.HasValue);
             //Assert.True(item.Parameters.Gem1.Value > 0);
             //Assert.True(item.Parameters.Gem2.HasValue);
@@ -509,7 +504,7 @@ namespace WOWSharp.Test.Warcraft
             var character = client.GetCharacterAsync(TestConstants.TestRealmName, TestConstants.TestHunter,
                                                 CharacterFields.HunterPets).Result;
             Assert.NotNull(character.HunterPets);
-            Assert.True(character.HunterPets.Count > 0);
+            Assert.NotEmpty(character.HunterPets);
             Assert.NotNull(character.HunterPets[0].CalculatorSpecialization);
             Assert.NotNull(character.HunterPets[0].Name);
             Assert.True(character.HunterPets[0].CreatureId > 0);
@@ -518,12 +513,15 @@ namespace WOWSharp.Test.Warcraft
             var pet = character.HunterPets.FirstOrDefault(p => p.Specialization != null && p.Specialization.Order > 0);
 
             Assert.NotNull(pet);
-            Assert.NotNull(pet.Specialization.BackgroundImage);
-            Assert.NotNull(pet.Specialization.Description);
-            Assert.NotNull(pet.Specialization.Icon);
-            Assert.NotNull(pet.Specialization.Name);
-            Assert.True(pet.Specialization.Order > 0);
-            Assert.NotNull(pet.Specialization.Role);
+            if (pet != null)
+            {
+                Assert.NotNull(pet.Specialization.BackgroundImage);
+                Assert.NotNull(pet.Specialization.Description);
+                Assert.NotNull(pet.Specialization.Icon);
+                Assert.NotNull(pet.Specialization.Name);
+                Assert.True(pet.Specialization.Order > 0);
+                Assert.NotNull(pet.Specialization.Role);
+            }
             //Assert.True(character.HunterPets.Any(p => p.IsSelected));
         }
 
@@ -544,19 +542,22 @@ namespace WOWSharp.Test.Warcraft
             var instance =
                 character.Progression.Raids.FirstOrDefault(r => r.HeroicProgress == CharacterInstanceStatus.Completed);
             Assert.NotNull(instance);
-            Assert.NotNull(instance.Name);
-            Assert.True(instance.Id > 0);
-            Assert.NotNull(instance.Bosses);
-            Assert.True(instance.Bosses.Count > 0);
-            Assert.NotNull(instance.Bosses[0]);
-            Assert.NotNull(instance.Bosses[0].Name);
-            Assert.NotNull(instance.Bosses[0].Id > 0);
-            Assert.NotEqual(0, instance.Bosses[0].HeroicKills);
-            Assert.NotEqual(1, instance.Bosses[0].NormalKills);
+            if (instance != null)
+            {
+                Assert.NotNull(instance.Name);
+                Assert.True(instance.Id > 0);
+                Assert.NotNull(instance.Bosses);
+                Assert.True(instance.Bosses.Count > 0);
+                Assert.NotNull(instance.Bosses[0]);
+                Assert.NotNull(instance.Bosses[0].Name);
+                Assert.NotNull(instance.Bosses[0].Id > 0);
+                Assert.NotEqual(0, instance.Bosses[0].HeroicKills);
+                Assert.NotEqual(1, instance.Bosses[0].NormalKills);
 
-            Assert.Equal(CharacterInstanceStatus.Completed, instance.NormalProgress);
-            Assert.NotNull(instance.ToString());
-            Assert.NotNull(instance.Bosses[0].ToString());
+                Assert.Equal(CharacterInstanceStatus.Completed, instance.NormalProgress);
+                Assert.NotNull(instance.ToString());
+                Assert.NotNull(instance.Bosses[0].ToString());
+            }
         }
 
         /// <summary>

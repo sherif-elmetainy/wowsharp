@@ -1,7 +1,5 @@
-using System.Collections.Generic;
 using Microsoft.Data.Entity.Migrations;
 using Microsoft.Data.Entity.Migrations.Builders;
-using Microsoft.Data.Entity.Migrations.Operations;
 
 namespace WOWSharpWebMigrations
 {

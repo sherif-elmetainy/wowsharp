@@ -26,12 +26,7 @@
 
 #endregion
 
-using Microsoft.Framework.Internal;
-#if LOGGING
-using Microsoft.Framework.Logging;
-#endif
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -40,6 +35,10 @@ using System.Net.Http.Headers;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.Framework.Internal;
+#if LOGGING
+using Microsoft.Framework.Logging;
+#endif
 
 namespace WOWSharp.BattleNet.Authenticator
 {
@@ -48,7 +47,7 @@ namespace WOWSharp.BattleNet.Authenticator
         /// <summary>
         /// The RSA public key used by blizzard enrollment service
         /// </summary>
-        private static readonly RSAParameters _enrollmentServiceRsaParameters =
+        private static readonly RSAParameters EnrollmentServiceRsaParameters =
             new RSAParameters()
             {
                 Modulus = new byte[]
@@ -64,12 +63,12 @@ namespace WOWSharp.BattleNet.Authenticator
                 }
             };
 
-        private static readonly Uri _cnHost = new Uri("http://mobile-service.blizzard.com.cn/");
-        private static readonly Uri _host = new Uri("http://mobile-service.blizzard.com/");
-        private const string _syncUrl = "/enrollment/time.htm";
-        private const string _restoreUrl = "/enrollment/initiatePaperRestore.htm";
-        private const string _validateRestoreUrl = "/enrollment/validatePaperRestore.htm";
-        private const string _enrollUrl = "/enrollment/enroll2.htm";
+        private static readonly Uri CNUri = new Uri("http://mobile-service.blizzard.com.cn/");
+        private static readonly Uri DefaultUri = new Uri("http://mobile-service.blizzard.com/");
+        private const string SyncUrl = "/enrollment/time.htm";
+        private const string RestoreUrl = "/enrollment/initiatePaperRestore.htm";
+        private const string ValidateRestoreUrl = "/enrollment/validatePaperRestore.htm";
+        private const string EnrollUrl = "/enrollment/enroll2.htm";
 
 #if LOGGING
 
@@ -104,7 +103,7 @@ namespace WOWSharp.BattleNet.Authenticator
 
             using (var rsa = new RSACryptoServiceProvider())
             {
-                rsa.ImportParameters(_enrollmentServiceRsaParameters);
+                rsa.ImportParameters(EnrollmentServiceRsaParameters);
                 var encrypted = rsa.Encrypt(enrollRequest, false);
                 using (var httpClient = new HttpClient())
                 {
@@ -112,7 +111,7 @@ namespace WOWSharp.BattleNet.Authenticator
                     {
                         var postContent = new StreamContent(postStream);
                         postContent.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
-                        var response = await httpClient.PostAsync(GetUri(regionCode, _enrollUrl), postContent).ConfigureAwait(false);
+                        var response = await httpClient.PostAsync(GetUri(regionCode, EnrollUrl), postContent).ConfigureAwait(false);
                         if (!response.IsSuccessStatusCode)
                         {
                             var error = $"Enroll request failed because server returned error code: {response.StatusCode}";
@@ -168,7 +167,7 @@ namespace WOWSharp.BattleNet.Authenticator
             using (var httpClient = new HttpClient())
             {
                 LogVerbose($"Attempting to get server time difference for region: '{regionCode}'.");
-                var response = await httpClient.GetAsync(GetUri(regionCode, _syncUrl)).ConfigureAwait(false);
+                var response = await httpClient.GetAsync(GetUri(regionCode, SyncUrl)).ConfigureAwait(false);
                 if (!response.IsSuccessStatusCode)
                 {
                     var error = $"Failed to Get server time different because server returned error code: {response.StatusCode}";
@@ -235,7 +234,7 @@ namespace WOWSharp.BattleNet.Authenticator
                     var unencrypted = ConcatenateByteArrays(hash, otp);
                     using (var rsa = new RSACryptoServiceProvider())
                     {
-                        rsa.ImportParameters(_enrollmentServiceRsaParameters);
+                        rsa.ImportParameters(EnrollmentServiceRsaParameters);
                         var encrypted = rsa.Encrypt(unencrypted, false);
                         var postData = ConcatenateByteArrays(serialBytes, encrypted);
 
@@ -243,7 +242,7 @@ namespace WOWSharp.BattleNet.Authenticator
                         {
                             var postContent = new StreamContent(postStream);
                             postContent.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
-                            var response = await httpClient.PostAsync(GetUri(regionCode, _validateRestoreUrl), postContent).ConfigureAwait(false);
+                            var response = await httpClient.PostAsync(GetUri(regionCode, ValidateRestoreUrl), postContent).ConfigureAwait(false);
                             if (!response.IsSuccessStatusCode)
                             {
                                 var error = $"Validate restore request failed because server returned error code: {response.StatusCode}";
@@ -277,7 +276,7 @@ namespace WOWSharp.BattleNet.Authenticator
                 {
                     var postContent = new StreamContent(ms);
                     postContent.Headers.ContentType = new MediaTypeHeaderValue("application/octet-stream");
-                    var response = await httpClient.PostAsync(GetUri(regionCode, _restoreUrl), postContent).ConfigureAwait(false);
+                    var response = await httpClient.PostAsync(GetUri(regionCode, RestoreUrl), postContent).ConfigureAwait(false);
                     if (!response.IsSuccessStatusCode)
                     {
                         var error = $"Initiate request failed because server returned error code: {response.StatusCode}";
@@ -330,7 +329,7 @@ namespace WOWSharp.BattleNet.Authenticator
 
         private static Uri GetUri(string regionCode, string relativeUri)
         {
-            var host = regionCode == "CN" ? _cnHost : _host;
+            var host = regionCode == "CN" ? CNUri : DefaultUri;
             return new Uri(host, relativeUri);
         }
 

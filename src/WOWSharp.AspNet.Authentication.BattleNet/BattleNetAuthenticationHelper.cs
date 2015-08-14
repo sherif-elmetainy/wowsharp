@@ -20,12 +20,9 @@
 // THE SOFTWARE.
 #endregion
 
+using System;
 using Microsoft.Framework.Internal;
 using Newtonsoft.Json.Linq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using WOWSharp.Interfaces;
 
 namespace WOWSharp.AspNet.Authentication.BattleNet
@@ -77,16 +74,8 @@ namespace WOWSharp.AspNet.Authentication.BattleNet
         {
             if (region != null)
             {
-                string host;
                 var path = uri.PathAndQuery;
-                if (path.StartsWith(BattleNetAuthenticationDefaults.UserInformationEndpoint, StringComparison.OrdinalIgnoreCase))
-                {
-                    host = region.ApiHost;
-                }
-                else
-                {
-                    host = region.OAuthHost;
-                }
+                var host = path.StartsWith(BattleNetAuthenticationDefaults.UserInformationEndpoint, StringComparison.OrdinalIgnoreCase) ? region.ApiHost : region.OAuthHost;
                 var baseUri = new Uri("https://" + host);
                 uri = new Uri(baseUri, path);
             }
@@ -96,10 +85,10 @@ namespace WOWSharp.AspNet.Authentication.BattleNet
         /// <summary>
         /// Changes the host information of a url to match that of the selected region
         /// </summary>
-        /// <param name="uri">URL to change</param>
+        /// <param name="url">URL to change</param>
         /// <param name="region">Region to get host information from. If null uri is not changed.</param>
         /// <returns>Modified URI</returns>
-        internal static string ChangeUriRegion([NotNull] this string url, Region region)
+        internal static string ChangeUrlRegion([NotNull] this string url, Region region)
         {
             if (region != null)
             {

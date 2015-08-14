@@ -1,14 +1,11 @@
-﻿using Microsoft.AspNet.Hosting;
-using Microsoft.Framework.Logging;
-using Microsoft.Framework.Runtime;
-using System;
+﻿using System;
 using System.Collections;
-using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using Microsoft.Framework.Logging;
+using Microsoft.Framework.Runtime;
 
 namespace WOWSharp.Web.Services
 {
@@ -33,7 +30,7 @@ namespace WOWSharp.Web.Services
         {
             private readonly string _folder;
             private readonly Func<string, LogLevel, bool> _filter;
-            private string _name;
+            private readonly string _name;
 
             public FileLogger(string folder, string name, Func<string, LogLevel, bool> filter)
             {
@@ -65,6 +62,7 @@ namespace WOWSharp.Web.Services
                 var file = Path.Combine(_folder, filename);
                 var finalMessage = $"{date:HH:mm:ss} {message}";
                 var folder = Path.GetDirectoryName(file);
+                Debug.Assert(folder != null, "Folder cannot be null");
                 if (!Directory.Exists(folder))
                 {
                     new DirectoryInfo(folder).Create();
@@ -85,7 +83,7 @@ namespace WOWSharp.Web.Services
                 {
                     return;
                 }
-                var message = string.Empty;
+                string message;
                 var values = state as ILogValues;
                 if (formatter != null)
                 {
@@ -116,7 +114,7 @@ namespace WOWSharp.Web.Services
                 DoWriteMessage(message);
             }
 
-            private const int _indentation = 2;
+            private const int Indentation = 2;
 
 
             private void FormatLogValues(StringBuilder builder, ILogValues logValues, int level, bool bullet)
@@ -132,46 +130,52 @@ namespace WOWSharp.Web.Services
                     builder.AppendLine();
                     if (bullet && isFirst)
                     {
-                        builder.Append(' ', level * _indentation - 1)
+                        builder.Append(' ', level * Indentation - 1)
                                .Append('-');
                     }
                     else
                     {
-                        builder.Append(' ', level * _indentation);
+                        builder.Append(' ', level * Indentation);
                     }
                     builder.Append(kvp.Key)
                            .Append(": ");
-                    if (kvp.Value is IEnumerable && !(kvp.Value is string))
+                    var enumerable = kvp.Value as IEnumerable;
+                    if (enumerable != null && !(kvp.Value is string))
                     {
-                        foreach (var value in (IEnumerable)kvp.Value)
+                        foreach (var value in enumerable)
                         {
-                            if (value is ILogValues)
+                            var vs = value as ILogValues;
+                            if (vs != null)
                             {
                                 FormatLogValues(
                                     builder,
-                                    (ILogValues)value,
+                                    vs,
                                     level + 1,
-                                    bullet: true);
+                                    true);
                             }
                             else
                             {
                                 builder.AppendLine()
-                                       .Append(' ', (level + 1) * _indentation)
+                                       .Append(' ', (level + 1) * Indentation)
                                        .Append(value);
                             }
                         }
                     }
-                    else if (kvp.Value is ILogValues)
-                    {
-                        FormatLogValues(
-                            builder,
-                            (ILogValues)kvp.Value,
-                            level + 1,
-                            bullet: false);
-                    }
                     else
                     {
-                        builder.Append(kvp.Value);
+                        var vs = kvp.Value as ILogValues;
+                        if (vs != null)
+                        {
+                            FormatLogValues(
+                                builder,
+                                vs,
+                                level + 1,
+                                false);
+                        }
+                        else
+                        {
+                            builder.Append(kvp.Value);
+                        }
                     }
                     isFirst = false;
                 }

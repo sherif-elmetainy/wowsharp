@@ -23,22 +23,21 @@
 #if LOGGING
 using Microsoft.Framework.Logging;
 #endif
-
-#if OPTIONS
-using Microsoft.Framework.OptionsModel;
-#endif
-
-using Microsoft.Framework.Internal;
-using Newtonsoft.Json;
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Net.Http;
-using System.Reflection;
 using System.Threading.Tasks;
+using Microsoft.Framework.Internal;
+using Newtonsoft.Json;
 using WOWSharp.Interfaces;
-using WOWSharp.Core.Serialization;
+#if DOTNET || DNXCORE50
+using System.Reflection;
+#endif
+#if OPTIONS
+using Microsoft.Framework.OptionsModel;
+#endif
 
 namespace WOWSharp.Core
 {
@@ -76,7 +75,7 @@ namespace WOWSharp.Core
             )
         {
             _httpClient = httpclient ?? new HttpClient();
-            _regionSelector = _regionSelector ?? DefaultRegionSelector.DefaultInstance;
+            _regionSelector = regionSelector ?? DefaultRegionSelector.DefaultInstance;
             _localeSelector = localeSelector;
 #if OPTIONS
             if (configureOptions != null)
@@ -108,6 +107,7 @@ namespace WOWSharp.Core
         /// </summary>
         /// <param name="message"></param>
         [Conditional("LOGGING")]
+        // ReSharper disable once UnusedParameter.Local
         private void LogVerbose(string message)
         {
 #if LOGGING
@@ -120,6 +120,7 @@ namespace WOWSharp.Core
         /// </summary>
         /// <param name="message"></param>
         [Conditional("LOGGING")]
+        // ReSharper disable once UnusedParameter.Local
         private void LogError(string message)
         {
 #if LOGGING
@@ -132,6 +133,7 @@ namespace WOWSharp.Core
         /// </summary>
         /// <param name="message"></param>
         [Conditional("LOGGING")]
+        // ReSharper disable once UnusedParameter.Local
         private void LogWarning(string message)
         {
 #if LOGGING
@@ -193,19 +195,18 @@ namespace WOWSharp.Core
         /// <summary>
         /// Adds an item to cache
         /// </summary>
-        /// <typeparam name="TResult">type of item to add</typeparam>
         /// <param name="key">key</param>
         /// <param name="obj">object to add</param>
         /// <returns>Async task</returns>
-        private async Task AddToCacheAsync(string key, object result)
+        private async Task AddToCacheAsync(string key, object obj)
         {
-            if (result != null && _cache != null)
+            if (obj != null && _cache != null)
             {
-                var options = _cachePolicy?.GetBattleNetCacheOptions(result) ?? BattleNetCacheOptions.Default;
+                var options = _cachePolicy?.GetBattleNetCacheOptions(obj) ?? BattleNetCacheOptions.Default;
                 if (options.CacheDurationSeconds > 0)
                 {
                     LogVerbose($"CacheAdd: {key}, {options.CacheDurationSeconds} secs, sliding: {options.UseSlidingExpiration}");
-                    await _cache.SetAsync(key, result, options);
+                    await _cache.SetAsync(key, obj, options);
                 }
             }
         }
@@ -232,7 +233,6 @@ namespace WOWSharp.Core
         /// <typeparam name="TResult">type of item to retrieve</typeparam>
         /// <param name="region">battle.net region</param>
         /// <param name="path">path</param>
-        /// <param name="ifModifiedSince"></param>
         /// <param name="ifModifiedSince">setting of If-Modified-Since HTTP header</param>
         /// <returns>Result or null if the HTTP server returned not modified status</returns>
         /// <exception cref="ApiException">The server returned a failure error code</exception>
@@ -254,7 +254,7 @@ namespace WOWSharp.Core
             var host = region.ApiHost;
             var uri = new Uri("https://" + host + "/" + path);
             var query = (string.IsNullOrEmpty(uri.Query) ? "?" : "&") + $"locale={Uri.EscapeUriString(locale.Replace('-', '_'))}&apikey={Uri.EscapeUriString(_options.ApiKey)}";
-            uri = new Uri(uri.ToString() + query);
+            uri = new Uri(uri + query);
             return uri;
         }
 
@@ -296,7 +296,7 @@ namespace WOWSharp.Core
                 throw new ApiException(error);
             }
             var query = (string.IsNullOrEmpty(uri.Query) ? "?" : "&") + $"access_token={token}";
-            uri = new Uri(uri.ToString() + query);
+            uri = new Uri(uri + query);
             return uri;
         }
 
@@ -352,8 +352,12 @@ namespace WOWSharp.Core
             var isBlob = typeof(BlobWrapper) == typeof(TResult);
             if (isBlob)
             {
-                var apiResonseResult = new BlobWrapper() { Content = await responseMessage.Content.ReadAsByteArrayAsync().ConfigureAwait(false), ContentType = responseMessage.Content.Headers.ContentType.MediaType };
-                apiResonseResult.Path = path;
+                var apiResonseResult = new BlobWrapper
+                {
+                    Content = await responseMessage.Content.ReadAsByteArrayAsync().ConfigureAwait(false),
+                    ContentType = responseMessage.Content.Headers.ContentType.MediaType,
+                    Path = path
+                };
                 return (TResult)(ApiResponse)apiResonseResult;
             }
             var responseStream = await responseMessage.Content.ReadAsStreamAsync().ConfigureAwait(false);
@@ -373,16 +377,18 @@ namespace WOWSharp.Core
                         // Make sure that responseStream.Dispose is not called more than once 
                         // by setting textReader to null
                         textReader = null;
-                        TResult apiResponseResult;
 
                         // Deserialization is a CPU bound operation
                         // But since some calls return big data (such as auction dump api)
                         // Serialization can take a long time
                         // therefore make it a separate task so that it doesn't block main thread
-                        var deserializeTask = new Task<TResult>(() => serializer.Deserialize<TResult>(jsonReader));
+                        var deserializeTask =
+                            // ReSharper disable once AccessToDisposedClosure
+                            // Task is awaited before disposed, so therefore will not be disposed in the closure.
+                            new Task<TResult>(() => serializer.Deserialize<TResult>(jsonReader));
                         deserializeTask.Start();
-                        apiResponseResult = await deserializeTask.ConfigureAwait(false);
-
+                        var apiResponseResult = await deserializeTask.ConfigureAwait(false);
+                        
                         apiResponseResult.LastModified = responseMessage.Content.Headers.LastModified ?? DateTimeOffset.Now;
                         // Post serialization
                         apiResponseResult.Path = path;
@@ -391,14 +397,12 @@ namespace WOWSharp.Core
                 }
                 finally
                 {
-                    if (textReader != null)
-                        textReader.Dispose();
+                    textReader?.Dispose();
                 }
             }
             finally
             {
-                if (responseStream != null)
-                    responseStream.Dispose();
+                responseStream?.Dispose();
             }
         }
     }

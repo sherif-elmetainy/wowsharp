@@ -24,7 +24,6 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Reflection;
 
 namespace WOWSharp.Core.Serialization
 {
@@ -37,12 +36,12 @@ namespace WOWSharp.Core.Serialization
         /// <summary>
         ///   Caches String -> EnumValue data
         /// </summary>
-        private static readonly Dictionary<string, T> _stringDict = InitializeStringDict();
+        private static readonly Dictionary<string, T> StringToEnumDictionary = InitializeStringDict();
 
         /// <summary>
         ///   Caches EnumValue -> String data
         /// </summary>
-        private static readonly Dictionary<T, string> _enumDict = InitializeEnumDict();
+        private static readonly Dictionary<T, string> EnumToStringDictionaryDict = InitializeEnumDict();
 
         /// <summary>
         ///   Initializes String -> EnumValue cache
@@ -87,13 +86,11 @@ namespace WOWSharp.Core.Serialization
         {
             int intVal;
             if (int.TryParse(value, out intVal))
-                return
-                    _enumDict.Keys.Where(k => Convert.ToInt32(k, CultureInfo.InvariantCulture) == intVal).FirstOrDefault
-                        ();
-            T enumValue = default(T);
-            if (_stringDict.TryGetValue(value, out enumValue))
+                return EnumToStringDictionaryDict.Keys.FirstOrDefault(k => Convert.ToInt32(k, CultureInfo.InvariantCulture) == intVal);
+            T enumValue;
+            if (StringToEnumDictionary.TryGetValue(value, out enumValue))
                 return enumValue;
-            throw new ArgumentOutOfRangeException("value", $"Enum value '{value}' is invalid for enum type '{typeof(T).Name}'");
+            throw new ArgumentOutOfRangeException(nameof(value), $"Enum value '{value}' is invalid for enum type '{typeof(T).Name}'");
         }
 
         /// <summary>
@@ -103,7 +100,7 @@ namespace WOWSharp.Core.Serialization
         /// <returns> String value </returns>
         public static string EnumToString(T value)
         {
-            return _enumDict[value];
+            return EnumToStringDictionaryDict[value];
         }
 
         /// <summary>

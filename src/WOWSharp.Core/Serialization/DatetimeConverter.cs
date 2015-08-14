@@ -20,14 +20,10 @@
 // THE SOFTWARE.
 #endregion
 
-
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Reflection;
-using System.Linq;
-using System.Text;
 using Newtonsoft.Json;
 
 namespace WOWSharp.Core.Serialization
@@ -40,19 +36,19 @@ namespace WOWSharp.Core.Serialization
         /// <summary>
         ///   Reference date for Unix time
         /// </summary>
-        private static readonly DateTimeOffset _unixStartDate = new DateTimeOffset(1970, 1, 1, 0, 0, 0, TimeSpan.Zero);
+        private static readonly DateTimeOffset UnixStartDate = new DateTimeOffset(1970, 1, 1, 0, 0, 0, TimeSpan.Zero);
 
 
         /// <summary>
         /// Whether the timestamp value is in milliseconds
         /// </summary>
-        private bool _isMilliseconds;
+        private readonly bool _isMilliseconds;
 
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="isMilliseconds">Whether the timestamp value is in milliseconds</param>
-        public DatetimeConverter(bool isMilliseconds)
+        protected DatetimeConverter(bool isMilliseconds)
         {
             _isMilliseconds = isMilliseconds;
         }
@@ -78,9 +74,9 @@ namespace WOWSharp.Core.Serialization
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
             if (objectType == null)
-                throw new ArgumentNullException("objectType");
+                throw new ArgumentNullException(nameof(objectType));
             if (reader == null)
-                throw new ArgumentNullException("reader");
+                throw new ArgumentNullException(nameof(reader));
             if (objectType == typeof(IList<DateTimeOffset>) || objectType == typeof(IList<DateTimeOffset?>))
             {
                 if (reader.TokenType == JsonToken.Null)
@@ -152,20 +148,15 @@ namespace WOWSharp.Core.Serialization
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
             if (writer == null)
-                throw new ArgumentNullException("writer");
+                throw new ArgumentNullException(nameof(writer));
             if (value == null)
                 writer.WriteNull();
             else if (value is DateTimeOffset)
             {
                 var date = (DateTimeOffset)value;
-                if (_isMilliseconds)
-                {
-                    writer.WriteValue(GetUnixTimeFromDateMilliseconds(date));
-                }
-                else
-                {
-                    writer.WriteValue(GetUnixTimeFromDateSeconds(date));
-                }
+                writer.WriteValue(_isMilliseconds
+                    ? GetUnixTimeFromDateMilliseconds(date)
+                    : GetUnixTimeFromDateSeconds(date));
             }
             else if (value is long)
             {
@@ -179,14 +170,9 @@ namespace WOWSharp.Core.Serialization
                     writer.WriteStartArray();
                     foreach (var date in dateTimeList)
                     {
-                        if (_isMilliseconds)
-                        {
-                            writer.WriteValue(GetUnixTimeFromDateMilliseconds(date));
-                        }
-                        else
-                        {
-                            writer.WriteValue(GetUnixTimeFromDateSeconds(date));
-                        }
+                        writer.WriteValue(_isMilliseconds
+                            ? GetUnixTimeFromDateMilliseconds(date)
+                            : GetUnixTimeFromDateSeconds(date));
                     }
                     writer.WriteEndArray();
                 }
@@ -213,7 +199,7 @@ namespace WOWSharp.Core.Serialization
                     }
                     else
                     {
-                        throw new ArgumentOutOfRangeException("value", $"Cannot convert type '{value.GetType().FullName}', can only convert {typeof(DateTimeOffset).Name} and and {typeof(DateTimeOffset?).Name}.");
+                        throw new ArgumentOutOfRangeException(nameof(value), $"Cannot convert type '{value.GetType().FullName}', can only convert {typeof(DateTimeOffset).Name} and and {typeof(DateTimeOffset?).Name}.");
                     }
                 }
             }
@@ -226,7 +212,7 @@ namespace WOWSharp.Core.Serialization
         /// <returns> Utc time object </returns>
         internal static DateTimeOffset GetUtcDateFromUnixTimeMilliseconds(long value)
         {
-            return _unixStartDate.AddMilliseconds(value);
+            return UnixStartDate.AddMilliseconds(value);
         }
 
         /// <summary>
@@ -236,7 +222,7 @@ namespace WOWSharp.Core.Serialization
         /// <returns> Unix time value </returns>
         internal static long GetUnixTimeFromDateMilliseconds(DateTimeOffset date)
         {
-            return (long)Math.Round((date - _unixStartDate).TotalMilliseconds, 0);
+            return (long)Math.Round((date - UnixStartDate).TotalMilliseconds, 0);
         }
 
         /// <summary>
@@ -246,7 +232,7 @@ namespace WOWSharp.Core.Serialization
         /// <returns> Utc time object </returns>
         internal static DateTimeOffset GetUtcDateFromUnixTimeSeconds(long value)
         {
-            return _unixStartDate.AddSeconds(value);
+            return UnixStartDate.AddSeconds(value);
         }
 
         /// <summary>
@@ -256,7 +242,7 @@ namespace WOWSharp.Core.Serialization
         /// <returns> Unix time value </returns>
         internal static long GetUnixTimeFromDateSeconds(DateTimeOffset date)
         {
-            return (long)Math.Round((date - _unixStartDate).TotalSeconds, 0);
+            return (long)Math.Round((date - UnixStartDate).TotalSeconds, 0);
         }
     }
 }

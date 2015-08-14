@@ -20,19 +20,17 @@
 // THE SOFTWARE.
 #endregion
 
-using Microsoft.Framework.Internal;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+using Microsoft.Framework.Internal;
 
 namespace WOWSharp.BattleNet.Authenticator
 {
     internal static class Validation
     {
-        private static readonly Regex _serialValidator = new Regex(AuthenticatorDefaults.SerialValidationExpression, RegexOptions.CultureInvariant | RegexOptions.IgnoreCase);
-        private static readonly Regex _restoreCodeValidator = new Regex(AuthenticatorDefaults.RestoreCodeValidationExpression, RegexOptions.CultureInvariant);
+        private static readonly Regex SerialValidator = new Regex(AuthenticatorDefaults.SerialValidationExpression, RegexOptions.CultureInvariant | RegexOptions.IgnoreCase);
+        private static readonly Regex RestoreCodeValidator = new Regex(AuthenticatorDefaults.RestoreCodeValidationExpression, RegexOptions.CultureInvariant);
 
         public static void ValidateRegionCode([NotNull] string regionCode)
         {
@@ -42,7 +40,7 @@ namespace WOWSharp.BattleNet.Authenticator
 
         public static void ValidateSerial([NotNull] string serial)
         {
-            if (!_serialValidator.IsMatch(serial))
+            if (!SerialValidator.IsMatch(serial))
             {
                 throw new ArgumentException($"Invalid serial number: '{serial}'", nameof(serial));
             }
@@ -50,9 +48,9 @@ namespace WOWSharp.BattleNet.Authenticator
 
         public static void ValidateRestoreCode([NotNull] string restoreCode)
         {
-            if (!_restoreCodeValidator.IsMatch(restoreCode))
+            if (!RestoreCodeValidator.IsMatch(restoreCode))
             {
-                throw new ArgumentException($"Invalid restore code.", nameof(restoreCode));
+                throw new ArgumentException("Invalid restore code.", nameof(restoreCode));
             }
         }
 
@@ -60,7 +58,7 @@ namespace WOWSharp.BattleNet.Authenticator
         {
             if (secretKey.Length != AuthenticatorDefaults.SecretKeyLength)
             {
-                throw new ArgumentException($"Invalid secret key.", nameof(secretKey));
+                throw new ArgumentException("Invalid secret key.", nameof(secretKey));
             }
         }
     }

@@ -20,9 +20,9 @@
 // THE SOFTWARE.
 #endregion
 
+using System;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using System;
 using WOWSharp.Core.Serialization;
 
 namespace WOWSharp.Warcraft

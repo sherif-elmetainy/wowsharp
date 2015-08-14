@@ -21,17 +21,13 @@
 #endregion
 
 #if DI
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.Framework.DependencyInjection;
-using WOWSharp.Interfaces;
-using WOWSharp.Core;
-using WOWSharp.Warcraft;
 using System.Net.Http;
 using Microsoft.Framework.Internal;
+using WOWSharp.Core;
+using WOWSharp.Interfaces;
+using WOWSharp.Warcraft;
 
+// ReSharper disable once CheckNamespace
 namespace Microsoft.Framework.DependencyInjection
 {
     /// <summary>
@@ -44,7 +40,7 @@ namespace Microsoft.Framework.DependencyInjection
         /// </summary>
         /// <param name="services"></param>
         /// <returns></returns>
-        private static IServiceCollection TryAddDefaultServices([NotNull] this IServiceCollection services)
+        private static void TryAddDefaultServices([NotNull] this IServiceCollection services)
         {
             services.AddLogging();
             services.AddOptions();
@@ -57,8 +53,6 @@ namespace Microsoft.Framework.DependencyInjection
 
             descriptor = new ServiceDescriptor(typeof(HttpClient), typeof(HttpClient), ServiceLifetime.Scoped);
             services.TryAdd(descriptor);
-
-            return services;
         }
 
         /// <summary>
@@ -86,7 +80,7 @@ namespace Microsoft.Framework.DependencyInjection
             var descriptor = new ServiceDescriptor(typeof(IBattleNetCache), typeof(BattleNetMemoryCache), ServiceLifetime.Singleton);
             services.TryAdd(descriptor);
 
-            descriptor = new ServiceDescriptor(typeof(IBattleNetCachePolicy), typeof(DataAnnotationsBattleNetCachePolicy), ServiceLifetime.Scoped);
+            descriptor = new ServiceDescriptor(typeof(IBattleNetCachePolicy), typeof(AttributesBattleNetCachePolicy), ServiceLifetime.Scoped);
             services.TryAdd(descriptor);
             return services;
         }

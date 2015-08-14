@@ -20,7 +20,6 @@
 // THE SOFTWARE.
 #endregion
 
-
 using Newtonsoft.Json;
 using WOWSharp.Core.Serialization;
 

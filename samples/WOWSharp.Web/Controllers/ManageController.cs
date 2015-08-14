@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using System.Security.Claims;
-using System.Security.Principal;
+using System.Threading.Tasks;
 using Microsoft.AspNet.Authorization;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Mvc;
-using WOWSharp.Web;
 using WOWSharp.Web.Models;
 using WOWSharp.Web.Services;
 
@@ -18,18 +14,15 @@ namespace WOWSharp.Web.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly IEmailSender _emailSender;
         private readonly ISmsSender _smsSender;
 
         public ManageController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
-            IEmailSender emailSender,
             ISmsSender smsSender)
         {
             _userManager = userManager;
             _signInManager = signInManager;
-            _emailSender = emailSender;
             _smsSender = smsSender;
         }
 
@@ -111,7 +104,7 @@ namespace WOWSharp.Web.Controllers
             var user = await GetCurrentUserAsync();
             var code = await _userManager.GenerateChangePhoneNumberTokenAsync(user, model.PhoneNumber);
             await _smsSender.SendSmsAsync(model.PhoneNumber, "Your security code is: " + code);
-            return RedirectToAction(nameof(VerifyPhoneNumber), new { PhoneNumber = model.PhoneNumber });
+            return RedirectToAction(nameof(VerifyPhoneNumber), new { model.PhoneNumber });
         }
 
         //
@@ -149,7 +142,7 @@ namespace WOWSharp.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> VerifyPhoneNumber(string phoneNumber)
         {
-            var code = await _userManager.GenerateChangePhoneNumberTokenAsync(await GetCurrentUserAsync(), phoneNumber);
+            await _userManager.GenerateChangePhoneNumberTokenAsync(await GetCurrentUserAsync(), phoneNumber);
             // Send an SMS to verify the phone number
             return phoneNumber == null ? View("Error") : View(new VerifyPhoneNumberViewModel { PhoneNumber = phoneNumber });
         }
@@ -330,16 +323,6 @@ namespace WOWSharp.Web.Controllers
             }
         }
 
-        private async Task<bool> HasPhoneNumber()
-        {
-            var user = await _userManager.FindByIdAsync(User.GetUserId());
-            if (user != null)
-            {
-                return user.PhoneNumber != null;
-            }
-            return false;
-        }
-
         public enum ManageMessageId
         {
             AddPhoneSuccess,
@@ -355,18 +338,6 @@ namespace WOWSharp.Web.Controllers
         private async Task<ApplicationUser> GetCurrentUserAsync()
         {
             return await _userManager.FindByIdAsync(Context.User.GetUserId());
-        }
-
-        private IActionResult RedirectToLocal(string returnUrl)
-        {
-            if (Url.IsLocalUrl(returnUrl))
-            {
-                return Redirect(returnUrl);
-            }
-            else
-            {
-                return RedirectToAction(nameof(HomeController.Index), nameof(HomeController));
-            }
         }
 
         #endregion

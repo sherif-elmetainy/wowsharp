@@ -20,16 +20,16 @@
 // THE SOFTWARE.
 #endregion
 
-using Microsoft.AspNet.Authentication.OAuth;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Authentication;
+using Microsoft.AspNet.Authentication.OAuth;
 using Microsoft.AspNet.Http.Authentication;
 using Microsoft.AspNet.WebUtilities;
 using Newtonsoft.Json.Linq;
-using System.Security.Claims;
 using WOWSharp.Interfaces;
 
 namespace WOWSharp.AspNet.Authentication.BattleNet
@@ -68,7 +68,7 @@ namespace WOWSharp.AspNet.Authentication.BattleNet
             {
                 // If we have a region selector service, use it to change the Host for the challenge URL
                 var region = _regionSelector.GetDefaultRegion();
-                url = url.ChangeUriRegion(region);
+                url = url.ChangeUrlRegion(region);
             }
             return url;
         }
@@ -85,8 +85,10 @@ namespace WOWSharp.AspNet.Authentication.BattleNet
         {
             // using the backchannel, call the User information endpoint to get user's id and battletag
             var requestUri = Options.UserInformationEndpoint;
-            var queryStrings = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-            queryStrings.Add("access_token", tokens.AccessToken);
+            var queryStrings = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase)
+            {
+                {"access_token", tokens.AccessToken}
+            };
             requestUri = QueryHelpers.AddQueryString(requestUri, queryStrings);
 
             var request = new HttpRequestMessage(HttpMethod.Get, requestUri);

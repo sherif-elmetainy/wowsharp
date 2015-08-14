@@ -21,11 +21,9 @@
 #endregion
 
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace WOWSharp.Interfaces
 {
@@ -121,24 +119,18 @@ namespace WOWSharp.Interfaces
         /// <param name="host"> Host name of the battle.net community website </param>
         /// <param name="oauthHost"> Host name of the OAUTH authorication battle.net community website </param>
         /// <param name="supportedLocales"> Languages supported by the community website </param>
-        private Region(string name, string host, string oauthhost, ReadOnlyCollection<string> supportedLocales)
+        private Region(string name, string host, string oauthHost, ReadOnlyCollection<string> supportedLocales)
         {
             Name = name;
             ApiHost = host;
-            OAuthHost = oauthhost;
+            OAuthHost = oauthHost;
             SupportedLocales = supportedLocales;
         }
 
         /// <summary>
         ///   Gets the default language for the region. Language of the current thread's culture is used if available, otherwise the default language for the regional site is used.
         /// </summary>
-        public string DefaultLocale
-        {
-            get
-            {
-                return GetSupportedLocale(null);
-            }
-        }
+        public string DefaultLocale => GetSupportedLocale(null);
 
         /// <summary>
         ///   Get the language supported by the regional website based on culture

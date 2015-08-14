@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNet.Mvc;
 using WOWSharp.Warcraft;
 
@@ -16,9 +13,10 @@ namespace WOWSharp.Web.Controllers
             _wowClient = wowClient;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var character = await _wowClient.GetCharacterAsync("Kazzak", "Grendiser", CharacterFields.None);
+            return View(character);
         }
 
         public IActionResult About()

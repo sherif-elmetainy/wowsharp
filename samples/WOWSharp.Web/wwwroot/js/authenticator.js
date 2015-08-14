@@ -3,19 +3,19 @@
 $(document).ready(function () {
     $('a.code-btn').click(function (e) {
         e.preventDefault();
-        var _this = $(this);
-        var url = _this.attr('href');
+        var that = $(this);
+        var url = that.attr('href');
         $.get(url, function (data) {
             function setAnimation(codeEl, duration) {
-                var div = $(codeEl).children('div')
+                $(codeEl).children('div')
                     .stop(true)
                     .width((1 - duration / 30000) * 100 + "%")
                     .animate({ width: "100%" }, { duration: duration, easing: "linear" });
             }
-            var codeEl = _this.siblings('div.code');
-            if (codeEl.length == 0) {
+            var codeEl = that.siblings('div.code');
+            if (codeEl.length === 0) {
                 codeEl = $('<div class="code"><div></div><span>' + data.Code + "</span></div>");
-                codeEl.appendTo(_this.parent());
+                codeEl.appendTo(that.parent());
             }
             else {
                 codeEl.children('span').text(data.Code);
@@ -25,31 +25,31 @@ $(document).ready(function () {
             function refresh() {
                 $.get(url, function (data) {
                     codeEl.children('span').text(data.Code);
-                    setTimeout(refresh, data.RemainingMilliseconds);
+                    window.setTimeout(refresh, data.RemainingMilliseconds);
                     setAnimation(codeEl, data.RemainingMilliseconds);
                 });
             }
-            setTimeout(refresh, data.RemainingMilliseconds);
+            window.setTimeout(refresh, data.RemainingMilliseconds);
         });
     });
     $('a.sync-btn').click(function (e) {
         e.preventDefault();
-        var _this = $(this);
-        var url = _this.attr('href');
+        var that = $(this);
+        var url = that.attr('href');
         $.post(url, function () {
-            if (_this.siblings('div.code').length != 0) {
-                _this.siblings('a.code-btn').trigger('click');
+            if (that.siblings('div.code').length !== 0) {
+                that.siblings('a.code-btn').trigger('click');
             }
         });
     });
     $('a.delt-btn').click(function (e) {
         e.preventDefault();
-        var _this = $(this);
-        var url = _this.attr('href');
+        var that = $(this);
+        var url = that.attr('href');
         $.ajax(url, {
             method: "DELETE",
             success: function () {
-                _this.parents("tr").remove();
+                that.parents("tr").remove();
             }
         });
     });

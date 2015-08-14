@@ -20,13 +20,10 @@
 // THE SOFTWARE.
 #endregion
 
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNet.Hosting;
-using WOWSharp.Interfaces;
 using Microsoft.Framework.Internal;
+using WOWSharp.Interfaces;
 
 namespace WOWSharp.AspNet.Authentication.BattleNet
 {
@@ -55,7 +52,7 @@ namespace WOWSharp.AspNet.Authentication.BattleNet
         /// <returns></returns>
         public string GetCurrentUserAccessToken()
         {
-            return _httpContextAccessor.HttpContext?.User?.Identities?.SelectMany(i => i.Claims)?.FirstOrDefault(c => c.Type == "bnet_access_token")?.Value;
+            return _httpContextAccessor.HttpContext?.User?.Identities?.SelectMany(i => i.Claims).FirstOrDefault(c => c.Type == "bnet_access_token")?.Value;
         }
     }
 }

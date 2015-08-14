@@ -21,31 +21,31 @@
 #endregion
 
 #if !DOTNET
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using Microsoft.AspNet.DataProtection;
 using Microsoft.Framework.Internal;
 using Microsoft.Framework.Logging;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace WOWSharp.BattleNet.Authenticator
 {
     public class UserProfileAuthenticatorDataRepository : IAuthenticatorDataRepository
     {
-        private IDataProtector _dataProtector;
-        private IEnrollmentClient _enrollmentservice;
-        private ILogger _logger;
+        private readonly IDataProtector _dataProtector;
+        private readonly IEnrollmentClient _enrollmentservice;
+        private readonly ILogger _logger;
 
-        public UserProfileAuthenticatorDataRepository([NotNull] IDataProtectionProvider dataProtectionProvider, [NotNull] IEnrollmentClient enrollmentService, [NotNull] ILoggerFactory _loggerFactory)
+        public UserProfileAuthenticatorDataRepository([NotNull] IDataProtectionProvider dataProtectionProvider, [NotNull] IEnrollmentClient enrollmentService, [NotNull] ILoggerFactory loggerFactory)
         {
             _dataProtector = dataProtectionProvider.CreateProtector(GetType().FullName);
             _enrollmentservice = enrollmentService;
-            _logger = _loggerFactory.CreateLogger<UserProfileAuthenticatorDataRepository>();
+            _logger = loggerFactory.CreateLogger<UserProfileAuthenticatorDataRepository>();
         }
 
         public async Task<IEnumerable<AuthenticatorData>> GetAuthenticatorsAsync()
@@ -56,7 +56,7 @@ namespace WOWSharp.BattleNet.Authenticator
                 return new AuthenticatorData[0];
             }
             var files = Directory.GetFiles(folder, "*.dat");
-            var tasks = files.Select(f => LoadAuthenticatorAsync(f));
+            var tasks = files.Select(LoadAuthenticatorAsync);
             var result = await Task.WhenAll(tasks).ConfigureAwait(false);
             return result;
         }
@@ -108,12 +108,14 @@ namespace WOWSharp.BattleNet.Authenticator
         {
             ValidateAuthenticatorData(data);
             var file = PathHelper.GetAuthenticatorsSavePath(data.AccountName);
+            Debug.Assert(file != null, "Authenticator Save Path cannot be null.");
             if (File.Exists(file))
             {
                 var error = $"Data for an account with the same name {data.AccountName} already exist";
                 _logger.LogWarning("Add authenticator failed. " + error);
                 throw new ArgumentException(error, nameof(data));
             }
+            // ReSharper disable once AssignNullToNotNullAttribute
             var dir = new DirectoryInfo(Path.GetDirectoryName(file));
             if (!dir.Exists)
             {

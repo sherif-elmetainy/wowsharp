@@ -21,14 +21,14 @@
 #endregion
 
 #if !DOTNET
-using Microsoft.Framework.Internal;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+using Microsoft.Framework.Internal;
 
 namespace WOWSharp.BattleNet.Authenticator
 {
@@ -50,6 +50,7 @@ namespace WOWSharp.BattleNet.Authenticator
             if (root == null)
             {
                 root = Environment.GetEnvironmentVariable("HOME");
+                Debug.Assert(root != null, "Either HOME and APPDATA Environment Variables must be set.");
                 return Path.Combine(root, ".wowsharp", "authenticators");
             }
             else
@@ -61,14 +62,14 @@ namespace WOWSharp.BattleNet.Authenticator
         public static IEnumerable<string> GetAccountNames()
         {
             var folder = GetAuthenticatorsSaveFolder();
-            return Directory.GetFiles("*.dat").Select(f => GetAccountNameFromFileName(Path.GetFileNameWithoutExtension(f)));
+            return Directory.GetFiles(folder, "*.dat").Select(f => GetAccountNameFromFileName(Path.GetFileNameWithoutExtension(f)));
         }
 
-        private static readonly Regex _findSpecialChars = new Regex("_x(?<d>[0-9a-fA-F]+)_", RegexOptions.CultureInvariant | RegexOptions.Compiled);
+        private static readonly Regex FindSpecialChars = new Regex("_x(?<d>[0-9a-fA-F]+)_", RegexOptions.CultureInvariant | RegexOptions.Compiled);
 
         private static string GetAccountNameFromFileName(string fileName)
         {
-            return _findSpecialChars.Replace(fileName, (m) =>
+            return FindSpecialChars.Replace(fileName, m =>
             {
                 var c = (char)int.Parse(m.Groups["d"].Value, NumberStyles.HexNumber, CultureInfo.InvariantCulture);
                 return c.ToString();

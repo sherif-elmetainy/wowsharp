@@ -22,16 +22,13 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
 
 namespace WOWSharp.Core.Serialization
 {
     public static class EnumHelper
     {
-        private static readonly Dictionary<Type, Dictionary<string, object>> _stringDict = new Dictionary<Type, Dictionary<string, object>>();
-        private static readonly Dictionary<Type, Dictionary<object, string>> _enumDict = new Dictionary<Type, Dictionary<object, string>>();
+        private static readonly Dictionary<Type, Dictionary<string, object>> StringToEnumDictionaryDict = new Dictionary<Type, Dictionary<string, object>>();
+        private static readonly Dictionary<Type, Dictionary<object, string>> EnumToStringDictionary = new Dictionary<Type, Dictionary<object, string>>();
 
         
 
@@ -71,13 +68,13 @@ namespace WOWSharp.Core.Serialization
 
         private static Dictionary<string, object> GetStringDict(Type enumType)
         {
-            lock(_stringDict)
+            lock(StringToEnumDictionaryDict)
             {
                 Dictionary<string, object> dict;
-                if (!_stringDict.TryGetValue(enumType, out dict))
+                if (!StringToEnumDictionaryDict.TryGetValue(enumType, out dict))
                 {
                     dict = InitializeStringDict(enumType);
-                    _stringDict.Add(enumType, dict);
+                    StringToEnumDictionaryDict.Add(enumType, dict);
                 }
                 return dict;
             }
@@ -85,13 +82,13 @@ namespace WOWSharp.Core.Serialization
 
         private static Dictionary<object, string> GetEnumDict(Type enumType)
         {
-            lock (_enumDict)
+            lock (EnumToStringDictionary)
             {
                 Dictionary<object, string> dict;
-                if (!_enumDict.TryGetValue(enumType, out dict))
+                if (!EnumToStringDictionary.TryGetValue(enumType, out dict))
                 {
                     dict = InitializeEnumDict(enumType);
-                    _enumDict.Add(enumType, dict);
+                    EnumToStringDictionary.Add(enumType, dict);
                 }
                 return dict;
             }

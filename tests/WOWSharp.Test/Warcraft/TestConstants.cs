@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using WOWSharp.Warcraft;
+﻿using WOWSharp.Warcraft;
 
 namespace WOWSharp.Test.Warcraft
 {
@@ -11,10 +7,10 @@ namespace WOWSharp.Test.Warcraft
         public const string TestRealmName = "Kazzak";
         public const string TestRegionName = "EU";
         public const string TestCharacterName = "Grendiser";
-        public const string TestGuildName = "Immortalis";
+        public const string TestGuildName = "Burning Triangle";
         public const string TestHunter = "Karkoor";
         public const ClassKey TestClass = ClassKey.Druid;
-        public const Race TestRace = Race.Troll;
+        public const Race TestRace = Race.Tauren;
         public const CharacterGender TestGender = CharacterGender.Male;
         public const Skill TestProfession1 = Skill.Alchemy;
         public const Skill TestProfession2 = Skill.Leatherworking;
