@@ -21,9 +21,9 @@
 #endregion
 
 using System.Linq;
-using Microsoft.AspNet.Hosting;
 using Microsoft.Framework.Internal;
 using WOWSharp.Interfaces;
+using Microsoft.AspNet.Http;
 
 namespace WOWSharp.AspNet.Authentication.BattleNet
 {

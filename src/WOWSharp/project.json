@@ -31,29 +31,29 @@
         "System.Runtime.Serialization": "4.0.0.0"
       },
       "dependencies": {
-        "Microsoft.Framework.Logging": "1.0.0-beta6",
-        "Microsoft.Framework.DependencyInjection.Abstractions": "1.0.0-beta6",
-        "Microsoft.Framework.DependencyInjection": "1.0.0-beta6"
+        "Microsoft.Framework.Logging": "1.0.0-beta7",
+        "Microsoft.Framework.DependencyInjection.Abstractions": "1.0.0-beta7",
+        "Microsoft.Framework.DependencyInjection": "1.0.0-beta7"
       },
       "compilationOptions": { "define": [ "DI", "LOGGING" ] }
     },
     "dnxcore50": {
       "dependencies": {
-        "System.Runtime": "4.0.20",
-        "System.Collections": "4.0.10",
-        "Microsoft.Framework.Logging": "1.0.0-beta6",
-        "Microsoft.Framework.DependencyInjection.Abstractions": "1.0.0-beta6",
-        "Microsoft.Framework.DependencyInjection": "1.0.0-beta6"
+        "System.Runtime": "4.0.21-beta-23225",
+        "System.Collections": "4.0.11-beta-23225",
+        "Microsoft.Framework.Logging": "1.0.0-beta7",
+        "Microsoft.Framework.DependencyInjection.Abstractions": "1.0.0-beta7",
+        "Microsoft.Framework.DependencyInjection": "1.0.0-beta7"
       },
       "compilationOptions": { "define": [ "DI", "LOGGING" ] }
     },
     "dotnet": {
       "dependencies": {
-        "System.Runtime": "4.0.10",
-        "System.Collections": "4.0.0",
-        "System.Runtime.Extensions": "4.0.0",
-        "System.Linq": "4.0.0",
-        "System.Globalization": "4.0.0"
+        "System.Runtime": "4.0.21-beta-23225",
+        "System.Collections": "4.0.11-beta-23225",
+        "System.Runtime.Extensions": "4.0.11-beta-23225",
+        "System.Linq": "4.0.1-beta-23225",
+        "System.Globalization": "4.0.11-beta-23225"
       },
       "compilationOptions": { "define": [ ] }
     }

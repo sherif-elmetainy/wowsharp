@@ -30,20 +30,20 @@
     },
     "dnxcore50": {
       "dependencies": {
-        "System.Runtime": "4.0.20",
-        "System.Collections": "4.0.10",
-        "System.Linq": "4.0.0",
-        "System.Globalization": "4.0.10"
+        "System.Runtime": "4.0.21-beta-23225",
+        "System.Collections": "4.0.11-beta-23225",
+        "System.Linq": "4.0.1-beta-23225",
+        "System.Globalization": "4.0.11-beta-23225"
       },
       "compilationOptions": { "define": [ ] }
     },
     "dotnet": {
       "dependencies": {
-        "System.Runtime": "4.0.10",
-        "System.Collections": "4.0.0",
-        "System.Linq": "4.0.0",
-        "System.Globalization": "4.0.0",
-        "System.Runtime.Extensions": "4.0.0"
+        "System.Runtime": "4.0.21-beta-23225",
+        "System.Collections": "4.0.11-beta-23225",
+        "System.Linq": "4.0.1-beta-23225",
+        "System.Globalization": "4.0.11-beta-23225",
+        "System.Runtime.Extensions": "4.0.11-beta-23225"
       },
       "compilationOptions": { "define": [ ] }
     }

@@ -4,8 +4,8 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Text;
+using Microsoft.Dnx.Runtime;
 using Microsoft.Framework.Logging;
-using Microsoft.Framework.Runtime;
 
 namespace WOWSharp.Web.Services
 {
@@ -180,6 +180,11 @@ namespace WOWSharp.Web.Services
                     isFirst = false;
                 }
             }
+        }
+
+        public void Dispose()
+        {
+            
         }
     }
 }

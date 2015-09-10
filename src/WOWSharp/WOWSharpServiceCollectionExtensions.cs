@@ -26,6 +26,7 @@ using Microsoft.Framework.Internal;
 using WOWSharp.Core;
 using WOWSharp.Interfaces;
 using WOWSharp.Warcraft;
+using Microsoft.Framework.DependencyInjection.Extensions;
 
 // ReSharper disable once CheckNamespace
 namespace Microsoft.Framework.DependencyInjection

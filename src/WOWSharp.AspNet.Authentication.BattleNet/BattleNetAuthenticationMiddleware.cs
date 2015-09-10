@@ -53,7 +53,7 @@ namespace WOWSharp.AspNet.Authentication.BattleNet
             [NotNull] IDataProtectionProvider dataProtectionProvider,
             [NotNull] ILoggerFactory loggerFactory,
             [NotNull] IUrlEncoder encoder,
-            [NotNull] IOptions<ExternalAuthenticationOptions> externalOptions,
+            [NotNull] IOptions<SharedAuthenticationOptions> externalOptions,
             [NotNull] IOptions<BattleNetAuthenticationOptions> options,
             IRegionSelector regionSelector = null,
             ConfigureOptions<BattleNetAuthenticationOptions> configureOptions = null)

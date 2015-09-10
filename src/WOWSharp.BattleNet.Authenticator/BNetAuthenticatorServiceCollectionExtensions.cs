@@ -21,6 +21,7 @@
 #endregion
 
 #if !DOTNET
+using Microsoft.Framework.DependencyInjection.Extensions;
 using Microsoft.Framework.Internal;
 using WOWSharp.BattleNet.Authenticator;
 

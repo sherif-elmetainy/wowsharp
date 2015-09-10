@@ -26,6 +26,7 @@
                     <tr>
                         <th>Account Name</th>
                         <th>Serial</th>
+                        <th>Restore Code</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -38,6 +39,9 @@
                             </td>
                             <td>
                                 @auth.Serial
+                            </td>
+                            <td>
+                                @auth.RestoreCode
                             </td>
                             <td>
                                 <a asp-action="Code" asp-route-name="@auth.AccountName" class="btn btn-default code-btn">Code</a>

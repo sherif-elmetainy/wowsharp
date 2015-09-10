@@ -22,6 +22,7 @@
 
 using System;
 using Microsoft.Framework.Configuration;
+using Microsoft.Framework.DependencyInjection.Extensions;
 using Microsoft.Framework.Internal;
 using WOWSharp.AspNet.Authentication.BattleNet;
 using WOWSharp.Interfaces;
