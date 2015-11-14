@@ -20,6 +20,7 @@
 // THE SOFTWARE.
 #endregion
 
+using System;
 using System.Linq;
 using Microsoft.Framework.Internal;
 using WOWSharp.Interfaces;
@@ -41,8 +42,9 @@ namespace WOWSharp.AspNet.Authentication.BattleNet
         /// Initializes a new <see cref="BattleNetAccessTokenAccessor"/>
         /// </summary>
         /// <param name="httpContextAcessor">An <see cref="IHttpContextAccessor"/> to use with this service</param>
-        public BattleNetAccessTokenAccessor([NotNull] IHttpContextAccessor httpContextAcessor )
+        public BattleNetAccessTokenAccessor(IHttpContextAccessor httpContextAcessor)
         {
+            if (httpContextAcessor == null) throw new ArgumentNullException(nameof(httpContextAcessor));
             _httpContextAccessor = httpContextAcessor;
         }
 

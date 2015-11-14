@@ -21,6 +21,7 @@
 #endregion
 
 #if DI
+using System;
 using System.Net.Http;
 using Microsoft.Framework.Internal;
 using WOWSharp.Core;
@@ -41,8 +42,9 @@ namespace Microsoft.Framework.DependencyInjection
         /// </summary>
         /// <param name="services"></param>
         /// <returns></returns>
-        private static void TryAddDefaultServices([NotNull] this IServiceCollection services)
+        private static void TryAddDefaultServices(this IServiceCollection services)
         {
+            if (services == null) throw new ArgumentNullException(nameof(services));
             services.AddLogging();
             services.AddOptions();
 
@@ -61,8 +63,10 @@ namespace Microsoft.Framework.DependencyInjection
         /// </summary>
         /// <param name="services"></param>
         /// <returns></returns>
-        public static IServiceCollection AddWarcraft([NotNull] this IServiceCollection services)
+        public static IServiceCollection AddWarcraft(this IServiceCollection services)
         {
+            if (services == null) throw new ArgumentNullException(nameof(services));
+
             services.TryAddDefaultServices();
             var descriptor = new ServiceDescriptor(typeof(WarcraftClient), typeof(WarcraftClient), ServiceLifetime.Scoped);
             services.TryAdd(descriptor);
@@ -74,8 +78,10 @@ namespace Microsoft.Framework.DependencyInjection
         /// </summary>
         /// <param name="services"></param>
         /// <returns></returns>
-        public static IServiceCollection AddBattleNetCache([NotNull] this IServiceCollection services)
+        public static IServiceCollection AddBattleNetCache(this IServiceCollection services)
         {
+            if (services == null) throw new ArgumentNullException(nameof(services));
+
             services.AddCaching();
             services.TryAddDefaultServices();
             var descriptor = new ServiceDescriptor(typeof(IBattleNetCache), typeof(BattleNetMemoryCache), ServiceLifetime.Singleton);

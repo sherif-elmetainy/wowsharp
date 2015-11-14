@@ -1,5 +1,5 @@
 ﻿{
-  "version": "3.0.0-alpha1",
+  "version": "3.0.0-alpha2",
   "description": "WOWSharp Class Library",
   "authors": [ "Sherif" ],
   "tags": [ "" ],
@@ -31,31 +31,21 @@
         "System.Runtime.Serialization": "4.0.0.0"
       },
       "dependencies": {
-        "Microsoft.Framework.Logging": "1.0.0-beta7",
-        "Microsoft.Framework.DependencyInjection.Abstractions": "1.0.0-beta7",
-        "Microsoft.Framework.DependencyInjection": "1.0.0-beta7"
+        "Microsoft.Framework.Logging": "1.0.0-beta8",
+        "Microsoft.Framework.DependencyInjection.Abstractions": "1.0.0-beta8",
+        "Microsoft.Framework.DependencyInjection": "1.0.0-beta8"
       },
       "compilationOptions": { "define": [ "DI", "LOGGING" ] }
     },
     "dnxcore50": {
       "dependencies": {
-        "System.Runtime": "4.0.21-beta-23225",
-        "System.Collections": "4.0.11-beta-23225",
-        "Microsoft.Framework.Logging": "1.0.0-beta7",
-        "Microsoft.Framework.DependencyInjection.Abstractions": "1.0.0-beta7",
-        "Microsoft.Framework.DependencyInjection": "1.0.0-beta7"
+        "System.Runtime": "4.0.21-beta-23409",
+        "System.Collections": "4.0.11-beta-23409",
+        "Microsoft.Framework.Logging": "1.0.0-beta8",
+        "Microsoft.Framework.DependencyInjection.Abstractions": "1.0.0-beta8",
+        "Microsoft.Framework.DependencyInjection": "1.0.0-beta8"
       },
       "compilationOptions": { "define": [ "DI", "LOGGING" ] }
-    },
-    "dotnet": {
-      "dependencies": {
-        "System.Runtime": "4.0.21-beta-23225",
-        "System.Collections": "4.0.11-beta-23225",
-        "System.Runtime.Extensions": "4.0.11-beta-23225",
-        "System.Linq": "4.0.1-beta-23225",
-        "System.Globalization": "4.0.11-beta-23225"
-      },
-      "compilationOptions": { "define": [ ] }
     }
   }
 }

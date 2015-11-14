@@ -35,7 +35,7 @@ namespace WOWSharp.Test
         private static IServiceProvider CreateServiceProvider()
         {
             Thread.CurrentThread.CurrentCulture = new CultureInfo("en-gb");
-            var builder = new ConfigurationBuilder(".").AddUserSecrets();
+            var builder = new ConfigurationBuilder().AddUserSecrets();
             var configuration = builder.Build();
 
             var services = new ServiceCollection();

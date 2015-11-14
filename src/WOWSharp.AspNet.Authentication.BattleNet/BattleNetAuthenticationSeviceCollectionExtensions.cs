@@ -23,7 +23,6 @@
 using System;
 using Microsoft.Framework.Configuration;
 using Microsoft.Framework.DependencyInjection.Extensions;
-using Microsoft.Framework.Internal;
 using WOWSharp.AspNet.Authentication.BattleNet;
 using WOWSharp.Interfaces;
 
@@ -31,7 +30,7 @@ using WOWSharp.Interfaces;
 namespace Microsoft.Framework.DependencyInjection
 {
     /// <summary>
-    /// Extension methods for using <see cref="BattleNetAuthenticationMiddleware"/>.
+    /// Extension methods for using <see cref="BattleNetMiddleware"/>.
     /// </summary>
     public static class BattleNetServiceCollectionExtensions
     {
@@ -49,53 +48,17 @@ namespace Microsoft.Framework.DependencyInjection
             services.TryAdd(descriptor);
             return services;
         }
-
         
-
         /// <summary>
         /// configures battle.net authentication
         /// </summary>
         /// <param name="services"></param>
         /// <param name="configure"></param>
         /// <returns></returns>
-        public static IServiceCollection ConfigureBattleNetAuthentication([NotNull] this IServiceCollection services, Action<BattleNetAuthenticationOptions> configure)
+        public static IServiceCollection ConfigureBattleNetAuthentication(this IServiceCollection services)
         {
-            return services.ConfigureBattleNetAuthentication(configure, optionsName: "");
-        }
-
-        /// <summary>
-        /// configures battle.net authentication
-        /// </summary>
-        /// <param name="services"></param>
-        /// <param name="configure"></param>
-        /// <param name="optionsName"></param>
-        /// <returns></returns>
-        public static IServiceCollection ConfigureBattleNetAuthentication([NotNull] this IServiceCollection services, Action<BattleNetAuthenticationOptions> configure, string optionsName)
-        {
-            return services.TryAddDefaultServices().Configure(configure, optionsName);
-        }
-
-        /// <summary>
-        /// configures battle.net authentication
-        /// </summary>
-        /// <param name="services"></param>
-        /// <param name="config"></param>
-        /// <returns></returns>
-        public static IServiceCollection ConfigureBattleNetAuthentication([NotNull] this IServiceCollection services, IConfiguration config)
-        {
-            return services.ConfigureBattleNetAuthentication(config, optionsName: "");
-        }
-
-        /// <summary>
-        /// configures battle.net authentication
-        /// </summary>
-        /// <param name="services"></param>
-        /// <param name="config"></param>
-        /// <param name="optionsName"></param>
-        /// <returns></returns>
-        public static IServiceCollection ConfigureBattleNetAuthentication([NotNull] this IServiceCollection services, IConfiguration config, string optionsName)
-        {
-            return services.TryAddDefaultServices().Configure<BattleNetAuthenticationOptions>(config, optionsName);
+            if (services == null) throw new ArgumentNullException(nameof(services));
+            return services.TryAddDefaultServices();
         }
     }
 }

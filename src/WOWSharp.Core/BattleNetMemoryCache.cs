@@ -33,8 +33,9 @@ namespace WOWSharp.Core
     {
         private readonly IMemoryCache _memoryCache;
 
-        public BattleNetMemoryCache([NotNull] IMemoryCache memoryCache)
+        public BattleNetMemoryCache(IMemoryCache memoryCache)
         {
+            if (memoryCache == null) throw new ArgumentNullException(nameof(memoryCache));
             _memoryCache = memoryCache;
         }
 

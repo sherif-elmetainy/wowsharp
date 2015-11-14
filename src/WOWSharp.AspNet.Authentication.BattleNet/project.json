@@ -1,43 +1,40 @@
 {
-    "version": "3.0.0-alpha1",
-    "description": "Supports Battle.NET OAuth authentication",
-    "authors": [ "Sherif" ],
-    "tags": [ "" ],
-    "projectUrl": "",
-    "licenseUrl": "",
+  "version": "3.0.0-alpha2",
+  "description": "Supports Battle.NET OAuth authentication",
+  "authors": [ "Sherif" ],
+  "tags": [ "" ],
+  "projectUrl": "",
+  "licenseUrl": "",
 
-    "userSecretsId": "WOWSharp",
-    "dependencies": {
-        "WOWSharp.Interfaces": "",
-        "Microsoft.Net.Http": "2.2.29",
-        "Microsoft.AspNet.Authentication.OAuth": "1.0.0-beta7",
-        "Microsoft.Framework.NotNullAttribute.Sources": {
-            "version": "1.0.0-*",
-            "type": "build"
-        },
-        "Microsoft.AspNet.Hosting.Abstractions": "1.0.0-beta7"
+  "userSecretsId": "WOWSharp",
+  "dependencies": {
+    "WOWSharp.Interfaces": "",
+    "Microsoft.Net.Http": "2.2.29",
+    "Microsoft.AspNet.Authentication.OAuth": "1.0.0-beta8",
+    "Microsoft.AspNet.Hosting.Abstractions": "1.0.0-beta8"
+  },
+
+  "frameworks": {
+    "dnx451": {
+      "frameworkAssemblies": {
+        "mscorlib": "4.0.0.0",
+        "System": "4.0.0.0",
+        "System.Core": "4.0.0.0",
+        "Microsoft.CSharp": "4.0.0.0",
+        "System.Runtime.Serialization": "4.0.0.0"
+      },
+      "dependencies": {
+
+      }
     },
-
-    "frameworks": {
-        "dnx451": {
-            "frameworkAssemblies": {
-                "mscorlib": "4.0.0.0",
-                "System": "4.0.0.0",
-                "System.Core": "4.0.0.0",
-                "Microsoft.CSharp": "4.0.0.0",
-                "System.Runtime.Serialization": "4.0.0.0"
-            },
-            "dependencies": {
-
-            }
-        },
-        "dnxcore50": {
-            "dependencies": {
-                "System.Runtime": "4.0.21-beta-23225",
-                "System.Collections": "4.0.11-beta-23225",
-                "System.Globalization": "4.0.10-beta-23109",
-                "System.Linq": "4.0.0-beta-23109"
-            }
-        }
+    "dnxcore50": {
+      "dependencies": {
+        "System.Runtime": "4.0.21-beta-23409",
+        "System.Collections": "4.0.11-beta-23409",
+        "System.Globalization": "4.0.11-beta-23409",
+        "System.Linq": "4.0.1-beta-23409",
+        "System.Net.Http.WinHttpHandler": "4.0.0-beta-23409"
+      }
     }
+  }
 }

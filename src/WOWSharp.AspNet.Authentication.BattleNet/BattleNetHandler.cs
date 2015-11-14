@@ -37,7 +37,7 @@ namespace WOWSharp.AspNet.Authentication.BattleNet
     /// <summary>
     /// Battle.NET OAUTH authentication handler
     /// </summary>
-    public class BattleNetAuthenticationHandler : OAuthAuthenticationHandler<BattleNetAuthenticationOptions>
+    public class BattleNetHandler : OAuthHandler<BattleNetOptions>
     {
         /// <summary>
         /// A reference fo region selection service
@@ -45,11 +45,11 @@ namespace WOWSharp.AspNet.Authentication.BattleNet
         private readonly IRegionSelector _regionSelector;
 
         /// <summary>
-        /// Constructor. Initializes a new instance of BattleNetAuthenticationHandler class
+        /// Constructor. Initializes a new instance of BattleNetHandler class
         /// </summary>
         /// <param name="backChannel">Httpclient used as backChannel to contact Token endpoint and user information endpoint</param>
         /// <param name="regionSelector"></param>
-        public BattleNetAuthenticationHandler(HttpClient backChannel, IRegionSelector regionSelector): base(backChannel)
+        public BattleNetHandler(HttpClient backChannel, IRegionSelector regionSelector): base(backChannel)
         {
             _regionSelector = regionSelector;
         }
@@ -97,7 +97,7 @@ namespace WOWSharp.AspNet.Authentication.BattleNet
             var text = await response.Content.ReadAsStringAsync();
             var payload = JObject.Parse(text);
 
-            var context = new OAuthAuthenticatedContext(Context, Options, Backchannel, tokens, payload);
+            var context = new OAuthCreatingTicketContext(Context, Options, Backchannel, tokens, payload);
 
             // Add ID and battletag claims to the claims identity
             var id = payload.GetId();
@@ -121,7 +121,6 @@ namespace WOWSharp.AspNet.Authentication.BattleNet
             context.Properties = properties;
             context.Principal = new ClaimsPrincipal(identity);
 
-            await Options.Notifications.Authenticated(context);
             return new AuthenticationTicket(context.Principal, context.Properties, context.Options.AuthenticationScheme);
         }
     }

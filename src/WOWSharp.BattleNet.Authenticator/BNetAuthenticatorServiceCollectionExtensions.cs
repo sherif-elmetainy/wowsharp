@@ -20,9 +20,8 @@
 // THE SOFTWARE.
 #endregion
 
-#if !DOTNET
+using System;
 using Microsoft.Framework.DependencyInjection.Extensions;
-using Microsoft.Framework.Internal;
 using WOWSharp.BattleNet.Authenticator;
 
 // ReSharper disable once CheckNamespace
@@ -38,8 +37,9 @@ namespace Microsoft.Framework.DependencyInjection
         /// </summary>
         /// <param name="services"></param>
         /// <returns></returns>
-        private static IServiceCollection TryAddDefaultServices([NotNull] this IServiceCollection services)
+        private static IServiceCollection TryAddDefaultServices(this IServiceCollection services)
         {
+            if (services == null) throw new ArgumentNullException(nameof(services));
             services.AddLogging();
             services.AddDataProtection();
 
@@ -55,10 +55,10 @@ namespace Microsoft.Framework.DependencyInjection
             return services;
         }
 
-        public static IServiceCollection AddBattleNetAuthenticator([NotNull] this IServiceCollection services)
+        public static IServiceCollection AddBattleNetAuthenticator(this IServiceCollection services)
         {
+            if (services == null) throw new ArgumentNullException(nameof(services));
             return services.TryAddDefaultServices();
         }
     }
 }
-#endif

@@ -21,12 +21,11 @@
 #endregion
 
 using System.Threading.Tasks;
-using Microsoft.Framework.Internal;
 
 namespace WOWSharp.BattleNet.Authenticator
 {
     public interface IAuthenticator
     {
-        Task<AuthenticatorCode> GetAuthenticatorCodeAsync([NotNull] string accountName);
+        Task<AuthenticatorCode> GetAuthenticatorCodeAsync(string accountName);
     }
 }

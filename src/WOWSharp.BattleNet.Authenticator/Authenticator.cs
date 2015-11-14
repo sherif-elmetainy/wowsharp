@@ -29,7 +29,6 @@
 using System;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
-using Microsoft.Framework.Internal;
 
 namespace WOWSharp.BattleNet.Authenticator
 {
@@ -37,8 +36,9 @@ namespace WOWSharp.BattleNet.Authenticator
     {
         private readonly IAuthenticatorDataRepository _repository;
 
-        public Authenticator([NotNull] IAuthenticatorDataRepository repository)
+        public Authenticator(IAuthenticatorDataRepository repository)
         {
+            if (repository == null) throw new ArgumentNullException(nameof(repository));
             _repository = repository;
         }
 
@@ -52,8 +52,10 @@ namespace WOWSharp.BattleNet.Authenticator
 #endif
         }
 
-        public async Task<AuthenticatorCode> GetAuthenticatorCodeAsync([NotNull] string accountName)
+        public async Task<AuthenticatorCode> GetAuthenticatorCodeAsync(string accountName)
         {
+            if (string.IsNullOrWhiteSpace(accountName)) throw new ArgumentNullException(nameof(accountName));
+
             var data = await _repository.GetAuthenticatorByAccountNameAsync(accountName);
 
             var hmac = new HMACSHA1(data.SecretKey);

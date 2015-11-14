@@ -31,7 +31,7 @@ namespace WOWSharp.Core.Serialization
     {
         public static bool IsEnumeration(this Type type)
         {
-#if DOTNET || DNXCORE50
+#if DNXCORE50
             return type.GetTypeInfo().IsEnum;
 #else
             return type.IsEnum;
@@ -41,7 +41,7 @@ namespace WOWSharp.Core.Serialization
 
         public static bool IsGeneric(this Type type)
         {
-#if DOTNET || DNXCORE50
+#if DNXCORE50
             return type.GetTypeInfo().IsGenericType;
 #else
             return type.IsGenericType;
@@ -56,12 +56,7 @@ namespace WOWSharp.Core.Serialization
 
         internal static IEnumerable<FieldInfo> GetEnumFields(this Type enumType)
         {
-#if DOTNET
-            return enumType.GetTypeInfo().DeclaredFields.Where(f => f.IsLiteral);
-#else
             return enumType.GetFields().Where(f => f.IsLiteral);
-#endif
-
         }
 
         internal static EnumMemberAttribute GetEnumMemberAttribute(this FieldInfo fieldInfo)
@@ -70,7 +65,7 @@ namespace WOWSharp.Core.Serialization
             return attrs.OfType<EnumMemberAttribute>().FirstOrDefault() ?? new EnumMemberAttribute() { Value = fieldInfo.Name };
         }
 
-#if DOTNET
+#if DNXCORE50
         internal static bool IsAssignableFrom(this Type type, Type other)
         {
             return type.GetTypeInfo().IsAssignableFrom(other.GetTypeInfo());

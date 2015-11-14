@@ -20,6 +20,7 @@
 // THE SOFTWARE.
 #endregion
 
+using System;
 using Microsoft.AspNet.Authentication;
 using Microsoft.AspNet.Authentication.OAuth;
 using Microsoft.AspNet.Builder;
@@ -35,30 +36,35 @@ namespace WOWSharp.AspNet.Authentication.BattleNet
     /// <summary>
     /// An ASP.NET middleware for authenticating users using Blizzard Entertainment's battle.net OAuth services.
     /// </summary>
-    public class BattleNetAuthenticationMiddleware : OAuthAuthenticationMiddleware<BattleNetAuthenticationOptions>
+    public class BattleNetMiddleware : OAuthMiddleware<BattleNetOptions>
     {
         /// <summary>
-        /// Initializes a new <see cref="BattleNetAuthenticationMiddleware" />
+        /// Initializes a new <see cref="BattleNetMiddleware" />
         /// </summary>
         /// <param name="next">The next middleware in the HTTP pipeline to invoke.</param>
         /// <param name="dataProtectionProvider"></param>
         /// <param name="loggerFactory"></param>
         /// <param name="encoder"></param>
-        /// <param name="externalOptions"></param>
+        /// <param name="sharedOptions"></param>
         /// <param name="options">Configuration options for the middleware.</param>
         /// <param name="regionSelector">Region selection service</param>
-        /// <param name="configureOptions"></param>
-        public BattleNetAuthenticationMiddleware(
-            [NotNull] RequestDelegate next,
-            [NotNull] IDataProtectionProvider dataProtectionProvider,
-            [NotNull] ILoggerFactory loggerFactory,
-            [NotNull] IUrlEncoder encoder,
-            [NotNull] IOptions<SharedAuthenticationOptions> externalOptions,
-            [NotNull] IOptions<BattleNetAuthenticationOptions> options,
-            IRegionSelector regionSelector = null,
-            ConfigureOptions<BattleNetAuthenticationOptions> configureOptions = null)
-            : base(next, dataProtectionProvider, loggerFactory, encoder, externalOptions, options, configureOptions)
+        public BattleNetMiddleware(
+            RequestDelegate next,
+            IDataProtectionProvider dataProtectionProvider,
+            ILoggerFactory loggerFactory,
+            IUrlEncoder encoder,
+            IOptions<SharedAuthenticationOptions> sharedOptions,
+            BattleNetOptions options,
+            IRegionSelector regionSelector = null)
+            : base(next, dataProtectionProvider, loggerFactory, encoder, sharedOptions, options)
         {
+            if (next == null) throw new ArgumentNullException(nameof(next));
+            if (dataProtectionProvider == null) throw new ArgumentNullException(nameof(dataProtectionProvider));
+            if (loggerFactory == null) throw new ArgumentNullException(nameof(loggerFactory));
+            if (encoder == null) throw new ArgumentNullException(nameof(encoder));
+            if (sharedOptions == null) throw new ArgumentNullException(nameof(sharedOptions));
+            if (options == null) throw new ArgumentNullException(nameof(options));
+
             if (Options.Scope.Count == 0)
             {
                 Options.Scope.Add("wow.profile");
@@ -68,12 +74,12 @@ namespace WOWSharp.AspNet.Authentication.BattleNet
         }
 
         /// <summary>
-        /// Provides the <see cref="AuthenticationHandler"/> object for processing authentication-related requests.
+        /// Provides the <see cref="AuthenticationHandler{BattleNetOptions}"/> object for processing authentication-related requests.
         /// </summary>
-        /// <returns>An <see cref="AuthenticationHandler"/> configured with the <see cref="OAuthAuthenticationOptions"/> supplied to the constructor.</returns>
-        protected override AuthenticationHandler<BattleNetAuthenticationOptions> CreateHandler()
+        /// <returns>An <see cref="AuthenticationHandler{BattleNetOptions}"/> configured with the <see cref="OAuthOptions"/> supplied to the constructor.</returns>
+        protected override AuthenticationHandler<BattleNetOptions> CreateHandler()
         {
-            return new BattleNetAuthenticationHandler(Backchannel, Options.RegionSelector);
+            return new BattleNetHandler(Backchannel, Options.RegionSelector);
         }
     }
 }

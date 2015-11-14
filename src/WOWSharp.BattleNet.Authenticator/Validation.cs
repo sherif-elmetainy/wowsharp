@@ -23,7 +23,6 @@
 using System;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Microsoft.Framework.Internal;
 
 namespace WOWSharp.BattleNet.Authenticator
 {
@@ -32,13 +31,13 @@ namespace WOWSharp.BattleNet.Authenticator
         private static readonly Regex SerialValidator = new Regex(AuthenticatorDefaults.SerialValidationExpression, RegexOptions.CultureInvariant | RegexOptions.IgnoreCase);
         private static readonly Regex RestoreCodeValidator = new Regex(AuthenticatorDefaults.RestoreCodeValidationExpression, RegexOptions.CultureInvariant);
 
-        public static void ValidateRegionCode([NotNull] string regionCode)
+        public static void ValidateRegionCode(string regionCode)
         {
             if (!AuthenticatorDefaults.Regions.Contains(regionCode, StringComparer.OrdinalIgnoreCase))
                 throw new ArgumentOutOfRangeException(nameof(regionCode), regionCode, $"'{regionCode}' is an invalid region code.");
         }
 
-        public static void ValidateSerial([NotNull] string serial)
+        public static void ValidateSerial(string serial)
         {
             if (!SerialValidator.IsMatch(serial))
             {
@@ -46,16 +45,20 @@ namespace WOWSharp.BattleNet.Authenticator
             }
         }
 
-        public static void ValidateRestoreCode([NotNull] string restoreCode)
+        public static void ValidateRestoreCode(string restoreCode)
         {
+            if (string.IsNullOrWhiteSpace(restoreCode)) throw new ArgumentNullException(nameof(restoreCode));
+
             if (!RestoreCodeValidator.IsMatch(restoreCode))
             {
                 throw new ArgumentException("Invalid restore code.", nameof(restoreCode));
             }
         }
 
-        public static void ValidateSecretKey([NotNull] byte[] secretKey)
+        public static void ValidateSecretKey(byte[] secretKey)
         {
+            if (secretKey == null) throw new ArgumentNullException(nameof(secretKey));
+
             if (secretKey.Length != AuthenticatorDefaults.SecretKeyLength)
             {
                 throw new ArgumentException("Invalid secret key.", nameof(secretKey));

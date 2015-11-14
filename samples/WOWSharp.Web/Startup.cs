@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNet.Authentication.Facebook;
-using Microsoft.AspNet.Authentication.MicrosoftAccount;
+﻿using System.Globalization;
+using System.Threading;
 using Microsoft.AspNet.Builder;
 using Microsoft.AspNet.Diagnostics.Entity;
 using Microsoft.AspNet.Hosting;
@@ -21,7 +21,8 @@ namespace WOWSharp.Web
         {
             // Setup configuration sources.
 
-            var builder = new ConfigurationBuilder(appEnv.ApplicationBasePath)
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(appEnv.ApplicationBasePath)
                 .AddJsonFile("config.json")
                 .AddJsonFile($"config.{env.EnvironmentName}.json", optional: true);
 
@@ -52,28 +53,6 @@ namespace WOWSharp.Web
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
-            // Configure the options for the authentication middleware.
-            // You can add options for Google, Twitter and other middleware as shown below.
-            // For more information see http://go.microsoft.com/fwlink/?LinkID=532715
-            services.Configure<FacebookAuthenticationOptions>(options =>
-            {
-                options.AppId = Configuration["Authentication:Facebook:AppId"];
-                options.AppSecret = Configuration["Authentication:Facebook:AppSecret"];
-            });
-
-            services.Configure<MicrosoftAccountAuthenticationOptions>(options =>
-            {
-                options.ClientId = Configuration["Authentication:MicrosoftAccount:ClientId"];
-                options.ClientSecret = Configuration["Authentication:MicrosoftAccount:ClientSecret"];
-            });
-            
-            // WOWSharp configuration
-            services.ConfigureBattleNetAuthentication(options =>
-            {
-                options.ClientId = Configuration["Authentication:BattleNet:Key"];
-                options.ClientSecret = Configuration["Authentication:BattleNet:Secret"];
-            });
-
             services.Configure<BattleNetClientOptions>(options =>
             {
                 options.ApiKey = Configuration["Authentication:BattleNet:Key"];
@@ -100,6 +79,18 @@ namespace WOWSharp.Web
         // Configure is called after ConfigureServices is called.
         public void Configure(IApplicationEnvironment appEnv, IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
+//            app.Use(async (c, n) =>
+//            {
+//                var culture = new CultureInfo("en-US");
+//#if DNX451
+//            Thread.CurrentThread.CurrentCulture = culture;
+//            Thread.CurrentThread.CurrentUICulture = culture;
+//#elif DNXCORE50
+//            CultureInfo.CurrentCulture = culture;
+//            CultureInfo.CurrentUICulture = culture;
+//#endif
+//                await n();
+//            });
             loggerFactory.MinimumLevel = LogLevel.Information;
             loggerFactory.AddConsole();
             loggerFactory.AddProvider(new FileLogProvider(appEnv, null));
@@ -110,15 +101,16 @@ namespace WOWSharp.Web
             if (env.IsDevelopment())
             {
                 app.UseBrowserLink();
-                app.UseErrorPage();
+                app.UseDeveloperExceptionPage();
                 app.UseDatabaseErrorPage(DatabaseErrorPageOptions.ShowAll);
             }
             else
             {
                 // Add Error handling middleware which catches all application specific errors and
                 // sends the request to the following path or controller action.
-                app.UseErrorHandler("/Home/Error");
+                app.UseExceptionHandler("/Home/Error");
             }
+            app.UseIISPlatformHandler();
 
             // Add static files to the request pipeline.
             app.UseStaticFiles();
@@ -133,7 +125,11 @@ namespace WOWSharp.Web
             // app.UseMicrosoftAccountAuthentication();
             // app.UseTwitterAuthentication();
 
-            app.UseBattleNetAuthentication();
+            app.UseBattleNetAuthentication(options =>
+            {
+                options.ClientId = Configuration["Authentication:BattleNet:Key"];
+                options.ClientSecret = Configuration["Authentication:BattleNet:Secret"];
+            });
 
             // Add MVC to the request pipeline.
             app.UseMvc(routes =>

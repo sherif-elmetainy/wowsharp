@@ -1,5 +1,5 @@
 ﻿{
-  "version": "3.0.0-alpha1",
+  "version": "3.0.0-alpha2",
   "description": "WOWSharp.Interfaces Class Library",
   "authors": [ "Sherif" ],
   "tags": [ "" ],
@@ -33,19 +33,11 @@
     },
     "dnxcore50": {
       "dependencies": {
-        "System.Runtime": "4.0.20",
-        "System.Collections": "4.0.10",
-        "System.Linq": "4.0.0",
-        "System.Globalization": "4.0.10"
-      }
-    },
-    "dotnet": {
-      "dependencies": {
-        "System.Runtime": "4.0.21-beta-23225",
-        "System.Collections": "4.0.11-beta-23225",
-        "System.Linq": "4.0.1-beta-23225",
-        "System.Globalization": "4.0.11-beta-23225",
-        "System.Runtime.Extensions": "4.0.11-beta-23225"
+        "System.Runtime": "4.0.21-beta-23409",
+        "System.Collections": "4.0.11-beta-23409",
+        "System.Globalization": "4.0.11-beta-23409",
+        "System.Linq": "4.0.1-beta-23409",
+        "System.Threading.Tasks": "4.0.11-beta-23409"
       }
     }
   }

@@ -30,15 +30,16 @@ namespace WOWSharp.AspNet.Authentication.BattleNet
     /// <summary>
     /// Helper method for battle.net authentication
     /// </summary>
-    internal static class BattleNetAuthenticationHelper
+    internal static class BattleNetHelper
     {
         /// <summary>
         /// Get user's id from json payload
         /// </summary>
         /// <param name="user">json payload</param>
         /// <returns>User's id</returns>
-        internal static string GetId([NotNull] this JObject user)
+        internal static string GetId(this JObject user)
         {
+            if (user == null) throw new ArgumentNullException(nameof(user));
             return user.TryGetValue("id");
         }
 
@@ -47,8 +48,9 @@ namespace WOWSharp.AspNet.Authentication.BattleNet
         /// </summary>
         /// <param name="user">json payload</param>
         /// <returns>User's battletag</returns>
-        internal static string GetBattleTag([NotNull] this JObject user)
+        internal static string GetBattleTag(this JObject user)
         {
+            if (user == null) throw new ArgumentNullException(nameof(user));
             return user.TryGetValue("battletag");
         }
 
@@ -70,12 +72,13 @@ namespace WOWSharp.AspNet.Authentication.BattleNet
         /// <param name="uri">URL to change</param>
         /// <param name="region">Region to get host information from. If null uri is not changed.</param>
         /// <returns>Modified URI</returns>
-        internal static Uri ChangeUriRegion([NotNull] this Uri uri, Region region)
+        internal static Uri ChangeUriRegion(this Uri uri, Region region)
         {
+            if (uri == null) throw new ArgumentNullException(nameof(uri));
             if (region != null)
             {
                 var path = uri.PathAndQuery;
-                var host = path.StartsWith(BattleNetAuthenticationDefaults.UserInformationEndpoint, StringComparison.OrdinalIgnoreCase) ? region.ApiHost : region.OAuthHost;
+                var host = path.StartsWith(BattleNetDefaults.UserInformationEndpoint, StringComparison.OrdinalIgnoreCase) ? region.ApiHost : region.OAuthHost;
                 var baseUri = new Uri("https://" + host);
                 uri = new Uri(baseUri, path);
             }
@@ -88,14 +91,13 @@ namespace WOWSharp.AspNet.Authentication.BattleNet
         /// <param name="url">URL to change</param>
         /// <param name="region">Region to get host information from. If null uri is not changed.</param>
         /// <returns>Modified URI</returns>
-        internal static string ChangeUrlRegion([NotNull] this string url, Region region)
+        internal static string ChangeUrlRegion(this string url, Region region)
         {
-            if (region != null)
-            {
-                var uri = new Uri(url).ChangeUriRegion(region);
-                return uri.ToString();
-            }
-            return url;
+            if (string.IsNullOrWhiteSpace(url)) throw new ArgumentNullException(nameof(url));
+
+            if (region == null) return url;
+            var uri = new Uri(url).ChangeUriRegion(region);
+            return uri.ToString();
         }
     }
 }

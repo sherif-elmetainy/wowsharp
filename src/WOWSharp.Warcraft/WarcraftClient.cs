@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.Framework.Internal;
 using WOWSharp.Core;
 using WOWSharp.Core.Serialization;
 
@@ -12,8 +11,9 @@ namespace WOWSharp.Warcraft
     {
         private readonly IBattleNetClient _client;
 
-        public WarcraftClient([NotNull] IBattleNetClient client)
+        public WarcraftClient(IBattleNetClient client)
         {
+            if (client == null) throw new ArgumentNullException(nameof(client));
             _client = client;
         }
 

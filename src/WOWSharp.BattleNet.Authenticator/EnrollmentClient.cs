@@ -35,7 +35,6 @@ using System.Net.Http.Headers;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
-using Microsoft.Framework.Internal;
 #if LOGGING
 using Microsoft.Framework.Logging;
 #endif
@@ -79,15 +78,17 @@ namespace WOWSharp.BattleNet.Authenticator
         /// </summary>
         /// <param name="logger"></param>
         public EnrollmentClient(
-                [NotNull] ILoggerFactory logger
+                ILoggerFactory logger
             )
         {
+            if (logger == null) throw new ArgumentNullException(nameof(logger));
             _logger = logger.CreateLogger<EnrollmentClient>();
         }
 #endif
 
-        public async Task<AuthenticatorData> EnrollAuthenticatorAsync([NotNull] string regionCode)
+        public async Task<AuthenticatorData> EnrollAuthenticatorAsync(string regionCode)
         {
+            if (string.IsNullOrWhiteSpace(regionCode)) throw new ArgumentNullException(nameof(regionCode));
             Validation.ValidateRegionCode(regionCode);
 
             LogVerbose($"Initiating enroll request for region code: '{regionCode}'.");
@@ -146,11 +147,14 @@ namespace WOWSharp.BattleNet.Authenticator
             return result;
         }
 
-        public string GetRestoreCode([NotNull] string serial, [NotNull] byte[] secretKey)
+        public string GetRestoreCode(string serial, byte[] secretKey)
         {
+            if (secretKey == null) throw new ArgumentNullException(nameof(secretKey));
+            if (string.IsNullOrWhiteSpace(serial)) throw new ArgumentNullException(nameof(serial));
+
             Validation.ValidateSerial(serial);
             Validation.ValidateSecretKey(secretKey);
-            byte[] serialdata = Encoding.UTF8.GetBytes(serial.Replace("-", string.Empty));
+            var serialdata = Encoding.UTF8.GetBytes(serial.Replace("-", string.Empty));
 
             // combine serial data and secret data
             var combined = ConcatenateByteArrays(serialdata, secretKey);
@@ -161,8 +165,9 @@ namespace WOWSharp.BattleNet.Authenticator
             }
         }
 
-        public async Task<TimeSpan> GetServerTimeDifferenceAsync([NotNull] string regionCode)
+        public async Task<TimeSpan> GetServerTimeDifferenceAsync(string regionCode)
         {
+            if (string.IsNullOrWhiteSpace(regionCode)) throw new ArgumentNullException(nameof(regionCode));
             Validation.ValidateRegionCode(regionCode);
             using (var httpClient = new HttpClient())
             {
@@ -190,8 +195,10 @@ namespace WOWSharp.BattleNet.Authenticator
         }
 
 
-        public async Task<AuthenticatorData> RestoreAuthenticatorDataAsync([NotNull] string serial, [NotNull] string restoreCode)
+        public async Task<AuthenticatorData> RestoreAuthenticatorDataAsync(string serial, string restoreCode)
         {
+            if (string.IsNullOrWhiteSpace(serial)) throw new ArgumentNullException(nameof(serial));
+            if (string.IsNullOrWhiteSpace(restoreCode)) throw new ArgumentNullException(nameof(restoreCode));
             Validation.ValidateSerial(serial);
             Validation.ValidateRestoreCode(restoreCode);
             serial = serial.ToUpperInvariant();

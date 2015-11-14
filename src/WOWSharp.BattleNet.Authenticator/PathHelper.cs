@@ -20,7 +20,6 @@
 // THE SOFTWARE.
 #endregion
 
-#if !DOTNET
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -28,13 +27,12 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Microsoft.Framework.Internal;
 
 namespace WOWSharp.BattleNet.Authenticator
 {
     public class PathHelper
     {
-        public static string GetAuthenticatorsSavePath([NotNull] string accountName)
+        public static string GetAuthenticatorsSavePath(string accountName)
         {
             accountName = GetFileNameFromAccountName(accountName);
 
@@ -53,10 +51,7 @@ namespace WOWSharp.BattleNet.Authenticator
                 Debug.Assert(root != null, "Either HOME and APPDATA Environment Variables must be set.");
                 return Path.Combine(root, ".wowsharp", "authenticators");
             }
-            else
-            {
-                return Path.Combine(root, "WOWSharp", "Authenticators");
-            }
+            return Path.Combine(root, "WOWSharp", "Authenticators");
         }
 
         public static IEnumerable<string> GetAccountNames()
@@ -87,4 +82,3 @@ namespace WOWSharp.BattleNet.Authenticator
         }
     }
 }
-#endif

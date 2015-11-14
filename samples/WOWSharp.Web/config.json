@@ -4,7 +4,7 @@
   },
   "Data": {
     "DefaultConnection": {
-      "ConnectionString": "Server=(localdb)\\mssqllocaldb;Database=aspnet5-WOWSharp.Web-451b7471-bcf7-41db-816c-448ebb16ffad;Trusted_Connection=True;MultipleActiveResultSets=true"
+      "ConnectionString": "Server=(localdb)\\mssqllocaldb;Database=aspnet5-WOWSharp.Web-0BA8CC4E-9F92-4919-91AE-CEA3C78E5061;Trusted_Connection=True;MultipleActiveResultSets=true"
     }
   }
 }

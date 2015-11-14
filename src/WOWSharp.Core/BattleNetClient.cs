@@ -29,13 +29,15 @@ using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Microsoft.Framework.Internal;
+
 using Newtonsoft.Json;
 using WOWSharp.Interfaces;
-#if DOTNET || DNXCORE50
-using System.Reflection;
+
+#if DNXCORE50
+using WOWSharp.Core.Serialization;
 #endif
-#if OPTIONS
+
+#if DNXCORE50 || DNX451
 using Microsoft.Framework.OptionsModel;
 #endif
 
@@ -56,15 +58,16 @@ namespace WOWSharp.Core
         private readonly ILogger _logger;
 #endif
 
+
+
         public BattleNetClient(
 #if LOGGING
-                [NotNull] ILoggerFactory loggerFactory,
+                ILoggerFactory loggerFactory,
 #endif
-#if OPTIONS
-                [NotNull] IOptions<BattleNetClientOptions> options,
-                ConfigureOptions<BattleNetClientOptions> configureOptions = null,
+#if DNXCORE50 || DNX451
+                IOptions<BattleNetClientOptions> options,
 #else
-                [NotNull] BattleNetClientOptions options,
+                BattleNetClientOptions options,
 #endif
                 HttpClient httpclient = null,
                 IRegionSelector regionSelector = null,
@@ -74,25 +77,23 @@ namespace WOWSharp.Core
                 IBattleNetCache cache = null
             )
         {
+            if (options == null) throw new ArgumentNullException(nameof(options));
+#if LOGGING
+            if (loggerFactory == null) throw new ArgumentNullException(nameof(loggerFactory));
+            _logger = loggerFactory.CreateLogger(GetType().FullName);
+#endif
+            
+
             _httpClient = httpclient ?? new HttpClient();
             _regionSelector = regionSelector ?? DefaultRegionSelector.DefaultInstance;
             _localeSelector = localeSelector;
-#if OPTIONS
-            if (configureOptions != null)
-            {
-                _options = options.GetNamedOptions(configureOptions.Name);
-                configureOptions.Configure(_options, configureOptions.Name);
-            }
-            else
-            {
-                _options = options.Options;
-            }
+#if DNXCORE50 || DNX451
+            _options = options.Value;
 #else
             _options = options;
 #endif
-#if LOGGING
-            _logger = loggerFactory.CreateLogger(GetType().FullName);
-#endif
+
+
             _cache = cache;
             _cachePolicy = cachePolicy;
             _accessTokenAccessor = accessTokenAccessor;
@@ -151,8 +152,8 @@ namespace WOWSharp.Core
         {
             var region = _regionSelector?.GetDefaultRegion() ?? Region.Default;
             var locale = _localeSelector?.GetLocale(region) ?? region.GetSupportedLocale(null);
-            bool isUserInformation = typeof(UserInformationApiResponse).IsAssignableFrom(typeof(TResult));
-            bool isBlob = typeof(BlobWrapper) == typeof(TResult);
+            var isUserInformation = typeof(UserInformationApiResponse).IsAssignableFrom(typeof(TResult));
+            var isBlob = typeof(BlobWrapper) == typeof(TResult);
             var key = isBlob || isUserInformation ? $"{region.Name.ToLowerInvariant()}/{path.ToLowerInvariant()}" : $"{region.Name.ToLowerInvariant()}/{locale.ToLowerInvariant()}/{path.ToLowerInvariant()}";
 
             // Attempt to get item from cache
@@ -221,8 +222,12 @@ namespace WOWSharp.Core
         /// <param name="ifModifiedSince">setting of If-Modified-Since HTTP header</param>
         /// <returns>Result or null if the HTTP server returned not modified status</returns>
         /// <exception cref="ApiException">The server returned a failure error code</exception>
-        public Task<TResult> GetAsync<TResult>([NotNull] Region region, [NotNull] string locale, [NotNull] string path, DateTimeOffset? ifModifiedSince = null) where TResult : ApiResponse
+        public Task<TResult> GetAsync<TResult>(Region region, string locale, string path, DateTimeOffset? ifModifiedSince = null) where TResult : ApiResponse
         {
+            if (region == null) throw new ArgumentNullException(nameof(region));
+            if (string.IsNullOrWhiteSpace(locale)) throw new ArgumentNullException(nameof(locale));
+            if (string.IsNullOrWhiteSpace(path)) throw new ArgumentNullException(nameof(path));
+
             Uri uri = typeof(BlobWrapper) == typeof(TResult) ? GetBlobUri(region, path) : GetUri(region, locale, path);
             return GetInternalAsync<TResult>(uri, path, ifModifiedSince);
         }
@@ -236,9 +241,11 @@ namespace WOWSharp.Core
         /// <param name="ifModifiedSince">setting of If-Modified-Since HTTP header</param>
         /// <returns>Result or null if the HTTP server returned not modified status</returns>
         /// <exception cref="ApiException">The server returned a failure error code</exception>
-        public Task<TResult> GetUserInformationAsync<TResult>([NotNull] Region region, [NotNull] string path, DateTimeOffset? ifModifiedSince) where TResult : ApiResponse
+        public Task<TResult> GetUserInformationAsync<TResult>(Region region, string path, DateTimeOffset? ifModifiedSince) where TResult : ApiResponse
         {
-            Uri uri = GetUserInformationUri(region, path);
+            if (region == null) throw new ArgumentNullException(nameof(region));
+            if (string.IsNullOrWhiteSpace(path)) throw new ArgumentNullException(nameof(path));
+            var uri = GetUserInformationUri(region, path);
             return GetInternalAsync<TResult>(uri, path, ifModifiedSince);
         }
 

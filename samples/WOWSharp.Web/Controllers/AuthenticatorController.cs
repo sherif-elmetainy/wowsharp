@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Mvc;
 using Microsoft.AspNet.Mvc.Rendering;
@@ -21,8 +22,12 @@ namespace WOWSharp.Web.Controllers
         private readonly IAuthenticator _authenticator;
         private readonly IEnrollmentClient _enrolClient;
 
-        public AuthenticatorController([NotNull] IAuthenticatorDataRepository repository, [NotNull] IAuthenticator authenticator, [NotNull] IEnrollmentClient enrollClient)
+        public AuthenticatorController(IAuthenticatorDataRepository repository, IAuthenticator authenticator, IEnrollmentClient enrollClient)
         {
+            if (repository == null) throw new ArgumentNullException(nameof(repository));
+            if (authenticator == null) throw new ArgumentNullException(nameof(authenticator));
+            if (enrollClient == null) throw new ArgumentNullException(nameof(enrollClient));
+
             _repository = repository;
             _authenticator = authenticator;
             _enrolClient = enrollClient;

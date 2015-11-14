@@ -26,31 +26,31 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Authentication.OAuth;
 using Microsoft.AspNet.Http;
-using Microsoft.Framework.Internal;
 using WOWSharp.Interfaces;
 
 namespace WOWSharp.AspNet.Authentication.BattleNet
 {
     /// <summary>
-    /// Configuration options for <see cref="BattleNetAuthenticationMiddleware"/>.
+    /// Configuration options for <see cref="BattleNetMiddleware"/>.
     /// </summary>
-    public class BattleNetAuthenticationOptions : OAuthAuthenticationOptions
+    public class BattleNetOptions : OAuthOptions
     {
         /// <summary>
-        /// Initializes a new <see cref="BattleNetAuthenticationOptions"/>
+        /// Initializes a new <see cref="BattleNetOptions"/>
         /// </summary>
-        public BattleNetAuthenticationOptions()
+        public BattleNetOptions()
         {
             var region = Region.Default;
-            AuthenticationScheme = BattleNetAuthenticationDefaults.AuthenticationScheme;
-            Caption = AuthenticationScheme;
+            AuthenticationScheme = BattleNetDefaults.AuthenticationScheme;
+            DisplayName = AuthenticationScheme;
             CallbackPath = new PathString("/signin-battlenet");
             SaveTokensAsClaims = false;
 
-            AuthorizationEndpoint = new Uri(new Uri("https://" + region.OAuthHost), BattleNetAuthenticationDefaults.AuthorizationEndpoint).ToString();
-            TokenEndpoint = new Uri(new Uri("https://" + region.OAuthHost), BattleNetAuthenticationDefaults.TokenEndpoint).ToString();
-            UserInformationEndpoint = new Uri(new Uri("https://" + region.ApiHost), BattleNetAuthenticationDefaults.UserInformationEndpoint).ToString();
+            AuthorizationEndpoint = new Uri(new Uri("https://" + region.OAuthHost), BattleNetDefaults.AuthorizationEndpoint).ToString();
+            TokenEndpoint = new Uri(new Uri("https://" + region.OAuthHost), BattleNetDefaults.TokenEndpoint).ToString();
+            UserInformationEndpoint = new Uri(new Uri("https://" + region.ApiHost), BattleNetDefaults.UserInformationEndpoint).ToString();
             BackchannelHttpHandler = new BattleNetAuthenticationMessageHandler(this);
+            
         }
 
         /// <summary>
@@ -68,18 +68,20 @@ namespace WOWSharp.AspNet.Authentication.BattleNet
 #endif
         {
             /// <summary>
-            /// Reference to <see cref="BattleNetAuthenticationOptions"/> using this Handler
+            /// Reference to <see cref="BattleNetOptions"/> using this Handler
             /// </summary>
-            private readonly BattleNetAuthenticationOptions _options;
+            private readonly BattleNetOptions _options;
 
             /// <summary>
             /// Initializes a new <see cref="BattleNetAuthenticationMessageHandler"/>
             /// </summary>
             /// <param name="options"></param>
-            public BattleNetAuthenticationMessageHandler([NotNull] BattleNetAuthenticationOptions options)
+            public BattleNetAuthenticationMessageHandler(BattleNetOptions options)
             {
+                if (options == null) throw new ArgumentNullException(nameof(options));
                 _options = options;
             }
+
 
             /// <summary>
             /// Overriden to change the host part of the Request URI for HTTP requests

@@ -20,7 +20,6 @@
 // THE SOFTWARE.
 #endregion
 
-#if !DOTNET
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -29,7 +28,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNet.DataProtection;
-using Microsoft.Framework.Internal;
 using Microsoft.Framework.Logging;
 using Newtonsoft.Json;
 
@@ -41,8 +39,12 @@ namespace WOWSharp.BattleNet.Authenticator
         private readonly IEnrollmentClient _enrollmentservice;
         private readonly ILogger _logger;
 
-        public UserProfileAuthenticatorDataRepository([NotNull] IDataProtectionProvider dataProtectionProvider, [NotNull] IEnrollmentClient enrollmentService, [NotNull] ILoggerFactory loggerFactory)
+        public UserProfileAuthenticatorDataRepository(IDataProtectionProvider dataProtectionProvider, IEnrollmentClient enrollmentService, ILoggerFactory loggerFactory)
         {
+            if (dataProtectionProvider == null) throw new ArgumentNullException(nameof(dataProtectionProvider));
+            if (enrollmentService == null) throw new ArgumentNullException(nameof(enrollmentService));
+            if (loggerFactory == null) throw new ArgumentNullException(nameof(loggerFactory));
+
             _dataProtector = dataProtectionProvider.CreateProtector(GetType().FullName);
             _enrollmentservice = enrollmentService;
             _logger = loggerFactory.CreateLogger<UserProfileAuthenticatorDataRepository>();
@@ -61,14 +63,18 @@ namespace WOWSharp.BattleNet.Authenticator
             return result;
         }
 
-        public bool CheckAccountNameExists([NotNull] string name)
+        public bool CheckAccountNameExists(string name)
         {
+            if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
+
             var file = PathHelper.GetAuthenticatorsSavePath(name);
             return File.Exists(file);
         }
 
-        public Task<bool> CheckAccountNameExistsAsync([NotNull] string name)
+        public Task<bool> CheckAccountNameExistsAsync(string name)
         {
+            if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
+
             return Task.FromResult(CheckAccountNameExists(name));
         }
 
@@ -78,8 +84,10 @@ namespace WOWSharp.BattleNet.Authenticator
             return Task.FromResult(PathHelper.GetAccountNames());
         }
 
-        public Task<AuthenticatorData> GetAuthenticatorByAccountNameAsync([NotNull] string name)
+        public Task<AuthenticatorData> GetAuthenticatorByAccountNameAsync(string name)
         {
+            if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
+
             var file = PathHelper.GetAuthenticatorsSavePath(name);
             if (!File.Exists(file))
             {
@@ -88,8 +96,10 @@ namespace WOWSharp.BattleNet.Authenticator
             return LoadAuthenticatorAsync(file);
         }
 
-        public Task DeleteAuthenticatorByAccountNameAsync([NotNull] string name)
+        public Task DeleteAuthenticatorByAccountNameAsync(string name)
         {
+            if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
+
             var file = PathHelper.GetAuthenticatorsSavePath(name);
             if (File.Exists(file))
             {
@@ -104,8 +114,10 @@ namespace WOWSharp.BattleNet.Authenticator
         }
         
 
-        public async Task AddAuthenticatorAsync([NotNull] AuthenticatorData data)
+        public async Task AddAuthenticatorAsync(AuthenticatorData data)
         {
+            if (data == null) throw new ArgumentNullException(nameof(data));
+
             ValidateAuthenticatorData(data);
             var file = PathHelper.GetAuthenticatorsSavePath(data.AccountName);
             Debug.Assert(file != null, "Authenticator Save Path cannot be null.");
@@ -126,8 +138,10 @@ namespace WOWSharp.BattleNet.Authenticator
             await SaveAuthenticatorAsync(data, file).ConfigureAwait(false);
         }
 
-        public async Task UpdateAuthenticatorAsync([NotNull] AuthenticatorData data)
+        public async Task UpdateAuthenticatorAsync(AuthenticatorData data)
         {
+            if (data == null) throw new ArgumentNullException(nameof(data));
+
             ValidateAuthenticatorData(data);
             var file = PathHelper.GetAuthenticatorsSavePath(data.AccountName);
             if (!File.Exists(file))
@@ -243,4 +257,4 @@ namespace WOWSharp.BattleNet.Authenticator
         }
     }
 }
-#endif
+
